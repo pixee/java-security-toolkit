@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level [%t] %c: %msg%n%throwable"/>
+    </Console>
+    <File name="File" fileName="loopback.log">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level [%t] %c: %msg%n%throwable"/>
+    </File>
+    <Async name="Async">
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="File"/>
+    </Async>
+  </Appenders>
+  <Loggers>
+    <Logger name="pixee" level="info" additivity="false">
+      <AppenderRef ref="Async"/>
+    </Logger>
+    <Root level="info">
+      <AppenderRef ref="Async"/>
+    </Root>
+  </Loggers>
+</Configuration>
