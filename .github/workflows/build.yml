@@ -17,11 +17,11 @@ jobs:
       - name: "Setting up Maven Central authentication"
         uses: s4u/maven-settings-action@v2
         with:
-          servers: '[{"id": "central", "username": "${env.MAVEN_USER}", "password": "${env.MAVEN_TOKEN}"}]'
+          servers: '[{"id": "central", "username": "${env.ARTIFACTORY_USER}", "password": "${env.ARTIFACTORY_TOKEN}"}]'
           githubServer: false
 
       - name: "Build with Maven"
         env:
-          MAVEN_USER: ${{ secrets.MAVEN_USER }}
-          MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
+          MAVEN_USER: ${{ secrets.ARTIFACTORY_USER }}
+          MAVEN_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
         run: mvn -X --batch-mode --update-snapshots verify

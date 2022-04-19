@@ -11,7 +11,7 @@
         <repository>
             <id>central</id>
             <name>pixee-libs-release</name>
-            <url>https://pixee.jfrog.io/artifactory/test</url>
+            <url>https://pixee.jfrog.io/artifactory/mailman</url>
         </repository>
     </distributionManagement>
 
