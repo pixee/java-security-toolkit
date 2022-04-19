@@ -7,6 +7,33 @@
     <artifactId>java-code-security-toolkit</artifactId>
     <version>0.0.2</version>
 
+    <distributionManagement>
+        <repository>
+            <id>central</id>
+            <name>pixee-libs-release</name>
+            <url>https://pixee.jfrog.io/artifactory/test</url>
+        </repository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>pixee-libs-release</name>
+            <url>https://pixee.jfrog.io/artifactory/mailman</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>snapshots</id>
+            <name>pixee-libs-snapshot</name>
+            <url>https://pixee.jfrog.io/artifactory/mailman</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <properties>
         <fmt.goal>format</fmt.goal>
 
