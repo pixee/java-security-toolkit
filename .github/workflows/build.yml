@@ -22,6 +22,6 @@ jobs:
 
       - name: "Build with Maven"
         env:
-          MAVEN_USER: ${{ secrets.ARTIFACTORY_USER }}
-          MAVEN_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+          ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
+          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
         run: mvn -X --batch-mode --update-snapshots verify
