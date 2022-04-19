@@ -1,4 +1,4 @@
-package pixee;
+package io.pixee.security;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -56,7 +56,7 @@ final class DeserializationTest {
   @Test
   void ois_harden_works() throws Exception {
     var ois = new ObjectInputStream(new ByteArrayInputStream(serializedGadget));
-    pixee.Deserialization.enableObjectFilterIfUnprotected(ois);
+    Deserialization.enableObjectFilterIfUnprotected(ois);
     assertThrows(
         InvalidClassException.class,
         () -> {

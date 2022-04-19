@@ -1,8 +1,8 @@
-package pixee;
+package io.pixee.security;
 
+import static io.pixee.security.HttpHeader.stripNewlines;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static pixee.HttpHeader.stripNewlines;
 
 import org.junit.jupiter.api.Test;
 

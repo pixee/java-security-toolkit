@@ -1,4 +1,4 @@
-package pixee;
+package io.pixee.security;
 
 import java.net.URL;
 import java.util.Objects;

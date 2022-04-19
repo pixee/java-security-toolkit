@@ -1,4 +1,4 @@
-package pixee;
+package io.pixee.security;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -44,7 +44,11 @@ final class ReflectionTest {
 
   @ParameterizedTest
   @ValueSource(
-      strings = {"java.lang.Integer", "pixee.CommandLine", "org.apache.commons.io.FileUtils"})
+      strings = {
+        "java.lang.Integer",
+        "io.pixee.security.CommandLine",
+        "org.apache.commons.io.FileUtils"
+      })
   void it_loads_normal_classes(final String typeName) throws ClassNotFoundException {
     Class<?> type = Reflection.loadAndVerify(typeName);
     assertThat(type, is(not(nullValue())));

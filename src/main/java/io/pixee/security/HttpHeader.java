@@ -1,4 +1,4 @@
-package pixee;
+package io.pixee.security;
 
 /** This type exposes helper methods that will help defend against header injection attacks. */
 public final class HttpHeader {

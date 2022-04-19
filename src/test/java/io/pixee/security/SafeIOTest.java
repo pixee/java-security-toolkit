@@ -1,4 +1,4 @@
-package pixee;
+package io.pixee.security;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -54,7 +54,7 @@ final class SafeIOTest {
       assertThat(map.get("name"), equalTo("test"));
 
       // run it again with our protection on to ensure it doesn't break anything
-      decoder = new XMLDecoder(pixee.SafeIO.toSafeXmlDecoderInputStream(getInputStreamFor(mapXml)));
+      decoder = new XMLDecoder(SafeIO.toSafeXmlDecoderInputStream(getInputStreamFor(mapXml)));
       map = (Map) decoder.readObject();
       assertThat(map.get("name"), equalTo("test"));
     }
@@ -78,8 +78,7 @@ final class SafeIOTest {
 
       // now we'll run it again, but with our protective InputStream
       final XMLDecoder protectedDecoder =
-          new XMLDecoder(
-              pixee.SafeIO.toSafeXmlDecoderInputStream(getInputStreamFor(processBuilderXml)));
+          new XMLDecoder(SafeIO.toSafeXmlDecoderInputStream(getInputStreamFor(processBuilderXml)));
       assertThrows(SecurityException.class, () -> protectedDecoder.readObject());
     }
   }

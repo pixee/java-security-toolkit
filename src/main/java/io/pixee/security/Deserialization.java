@@ -1,4 +1,4 @@
-package pixee;
+package io.pixee.security;
 
 import java.io.IOException;
 import java.io.InputStream;

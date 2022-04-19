@@ -1,4 +1,4 @@
-package pixee;
+package io.pixee.security;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.stream.XMLInputFactory;

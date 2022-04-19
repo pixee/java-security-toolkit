@@ -1,4 +1,4 @@
-package pixee;
+package io.pixee.security;
 
 import java.lang.reflect.Modifier;
 import java.util.Set;
