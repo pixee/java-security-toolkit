@@ -20,8 +20,8 @@ public final class Reflection {
       Set.of(Restrictions.MUST_NOT_INVOLVE_CODE_EXECUTION);
 
   /**
-   * Provide the default restrictions for loading a type that will work for the vast, vast majority
-   * of applications.
+   * Provide the default restrictions for loading a type that will work for the vast majority of
+   * applications.
    */
   public static Set<Restrictions> defaultRestrictions() {
     return defaultRestrictions;

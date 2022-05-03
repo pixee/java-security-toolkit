@@ -15,7 +15,7 @@ public final class SafeIO {
 
   private SafeIO() {}
 
-  interface ReaderWrapper {
+  private interface ReaderWrapper {
     int read() throws IOException;
   }
 
