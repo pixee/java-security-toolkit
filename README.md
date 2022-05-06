@@ -1,8 +1,8 @@
 # Java Code Security Toolkit
 
 This utility hosts a number of code security controls for various application security vulnerability categories. It can 
-be used directly by programmers, but you may have been introduced to it by being having it directly injected into
-your application by pixee.
+be used directly by programmers, but you may have been introduced to it by being having it directly added to you code by 
+automation.
 
 
 ## Building
