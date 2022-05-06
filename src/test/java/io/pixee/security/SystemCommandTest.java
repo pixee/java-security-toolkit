@@ -45,7 +45,7 @@ final class SystemCommandTest {
 
   @Test
   void it_allows_innocent_commands() throws IOException {
-    SystemCommand.runCommand(rt, "ls");
+    SystemCommand.runCommand(rt, "ls \"-al\" '2nd arg'");
     SystemCommand.runCommand(rt, new String[] {"ls", "-al"});
     SystemCommand.runCommand(rt, new String[] {"ls", "-al"}, new String[] {});
     SystemCommand.runCommand(rt, "ls", new String[] {});
