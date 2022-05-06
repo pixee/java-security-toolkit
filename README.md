@@ -1,3 +1,6 @@
+[![Actions Status](https://github.com/pixeeworks/java-security-toolkit/workflows/Java%20CI/badge.svg)](https://github.com/pixeeworks/java-security-toolkit/actions)
+![Coverage](.github/badges/jacoco.svg)
+
 # Java Code Security Toolkit
 
 This utility hosts a number of code security controls for various application security vulnerability categories. It can 
@@ -11,6 +14,3 @@ Building is meant for Java 11 and Maven 3:
 ```
 mvn clean package
 ```
-
-TODO: add link javadoc
-TODO: add maven / gradle snippets
