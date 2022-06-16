@@ -88,7 +88,7 @@ final class SafeIOTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"../foo.txt", "foo.txt", "/whatever/foo.txt"})
+  @ValueSource(strings = {"../foo.txt", "foo.txt", "/whatever/foo.txt", (char)0x0 + "foo.txt"})
   void it_normalizes_paths(final String path) {
     assertThat(SafeIO.toSimpleFileName(path), equalTo("foo.txt"));
   }

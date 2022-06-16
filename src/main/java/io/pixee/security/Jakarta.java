@@ -37,7 +37,7 @@ public final class Jakarta {
       List.of(new ApacheFilenameUtilsPathNormalizer(), new UriPathNormalizer());
 
   /**
-   * Validates the path argument to HttpServletRequest#getRequestDispatcher(), which could be used
+   * Validates the path argument to {@link javax.servlet.http.HttpServletRequest#getRequestDispatcher()}, which could be used
    * to gain access to sensitive assets like configuration files, code files, etc. This method only
    * protects against assets that are common amongst all apps, and thus represent easier targets for
    * attackers. If the attacker is using brute force or has insider knowledge, they could still

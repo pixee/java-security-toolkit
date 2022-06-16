@@ -191,6 +191,6 @@ public final class SafeIO {
       // this file name will probably cause issues but we can't help
       return fileName;
     }
-    return new File(fileName).getName().replace("/", "").replace(":", "").replace("\\", "");
+    return new File(fileName).getName().replace("" + (char)0x0, "").replace("/", "").replace(":", "").replace("\\", "");
   }
 }
