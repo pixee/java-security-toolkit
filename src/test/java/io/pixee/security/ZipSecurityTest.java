@@ -14,14 +14,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-final class ZipTest {
+final class ZipSecurityTest {
 
   @Test
   void it_doesnt_prevent_normal_zip_file_reads() throws IOException {
     var entry = new ZipEntry("normal.txt");
     var is = createZipFrom(entry);
 
-    var hardenedStream = Zip.createHardenedZipInputStream(is);
+    var hardenedStream = ZipSecurity.createHardenedInputStream(is);
     var retrievedEntry = hardenedStream.getNextEntry();
     assertThat(retrievedEntry.getName(), equalTo("normal.txt"));
   }
@@ -32,7 +32,7 @@ final class ZipTest {
     var entry = new ZipEntry(path);
     var is = createZipFrom(entry);
 
-    var hardenedStream = Zip.createHardenedZipInputStream(is);
+    var hardenedStream = ZipSecurity.createHardenedInputStream(is);
     var retrievedEntry = hardenedStream.getNextEntry();
     assertThat(retrievedEntry.getName(), equalTo(path));
   }
@@ -43,7 +43,7 @@ final class ZipTest {
     var entry = new ZipEntry(path);
     var is = createZipFrom(entry);
 
-    var hardenedStream = Zip.createHardenedZipInputStream(is);
+    var hardenedStream = ZipSecurity.createHardenedInputStream(is);
     assertThrows(SecurityException.class, hardenedStream::getNextEntry);
   }
 
@@ -52,7 +52,7 @@ final class ZipTest {
     var entry = new ZipEntry("/foo.txt");
     var is = createZipFrom(entry);
 
-    var hardenedStream = Zip.createHardenedZipInputStream(is);
+    var hardenedStream = ZipSecurity.createHardenedInputStream(is);
     assertThrows(SecurityException.class, hardenedStream::getNextEntry);
   }
 

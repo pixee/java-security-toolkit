@@ -14,9 +14,9 @@ import org.apache.commons.io.serialization.ValidatingObjectInputStream;
  * <p>For more information on deserialization:
  * https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html
  */
-public final class Deserialization {
+public final class ObjectInputFilters {
 
-  private Deserialization() {}
+  private ObjectInputFilters() {}
 
   /**
    * This method returns an {@link ObjectInputFilter} for use in {@link
@@ -24,8 +24,8 @@ public final class Deserialization {
    * deserialization code execution attacks. This method is meant for Java 9+ apps since it relies
    * on methods introduced in that version.
    */
-  public static ObjectInputFilter hardenedObjectFilter() {
-    return filter;
+  public static ObjectInputFilter getHardenedObjectFilter() {
+    return basicGadgetDenylistFilter;
   }
 
   /**
@@ -41,7 +41,7 @@ public final class Deserialization {
     var objectInputFilter = ois.getObjectInputFilter();
     if (objectInputFilter == null) {
       try {
-        ois.setObjectInputFilter(filter);
+        ois.setObjectInputFilter(basicGadgetDenylistFilter);
       } catch (Exception e) {
         /*
          * This is expected when the SecurityManager has an opinion about this, or maybe another thread has installed an
@@ -66,12 +66,12 @@ public final class Deserialization {
   public static ObjectInputFilter createCombinedHardenedObjectFilter(
       final ObjectInputFilter existingFilter) {
     if (existingFilter == null) {
-      return filter;
+      return basicGadgetDenylistFilter;
     }
     return new CombinedObjectInputFilter(existingFilter);
   }
 
-  static class CombinedObjectInputFilter implements ObjectInputFilter {
+  private static class CombinedObjectInputFilter implements ObjectInputFilter {
     private final ObjectInputFilter originalFilter;
 
     private CombinedObjectInputFilter(final ObjectInputFilter originalFilter) {
@@ -80,7 +80,7 @@ public final class Deserialization {
 
     @Override
     public Status checkInput(final FilterInfo filterInfo) {
-      if (Status.REJECTED.equals(filter.checkInput(filterInfo))) {
+      if (Status.REJECTED.equals(basicGadgetDenylistFilter.checkInput(filterInfo))) {
         return Status.REJECTED;
       }
       return originalFilter.checkInput(filterInfo);
@@ -212,6 +212,6 @@ public final class Deserialization {
           "sun.rmi.server.UnicastRef",
           "sun.rmi.transport.DGCClient$EndpointEntry");
 
-  private static final ObjectInputFilter filter =
+  private static final ObjectInputFilter basicGadgetDenylistFilter =
       ObjectInputFilter.Config.createFilter("!" + String.join(";!", gadgets));
 }

@@ -2,28 +2,18 @@ package io.pixee.security;
 
 import java.util.List;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.stream.XMLInputFactory;
 
 /**
- * This type exposes helper methods that will help defend against XXE attacks.
+ * This type exposes helper methods that will help defend against XXE attacks in {@link
+ * DocumentBuilderFactory}.
  *
  * <p>For more on XXE:
  *
  * <p>https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
  */
-public final class XXE {
+public final class DocumentBuilderFactorySecurity {
 
-  private XXE() {}
-
-  /** Harden the {@link XMLInputFactory} against XML-based attacks. */
-  public static XMLInputFactory hardenXmlInputFactory(final XMLInputFactory factory) {
-    try {
-      factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
-    } catch (Exception e) {
-      // we could have unexpected behavior from XML providers, so we protect execution
-    }
-    return factory;
-  }
+  private DocumentBuilderFactorySecurity() {}
 
   /**
    * Harden the {@link DocumentBuilderFactory} against XML-based attacks, and promote directly to

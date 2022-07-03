@@ -11,18 +11,11 @@ public final class SystemCommand {
 
   private SystemCommand() {}
 
-  /** The restrictions that could be applied to a command being run through this type. */
-  public enum Restrictions {
-    PREVENT_COMMAND_CHAINING,
-    PREVENT_COMMON_EXPLOIT_EXECUTABLES,
-    PREVENT_ARGUMENTS_TARGETING_SENSITIVE_FILES
-  }
-
   /** The default restrictions if none are specified. */
-  public static Set<Restrictions> defaultRestrictions() {
+  public static Set<SystemCommandRestrictions> defaultRestrictions() {
     return Set.of(
-        Restrictions.PREVENT_COMMAND_CHAINING,
-        Restrictions.PREVENT_ARGUMENTS_TARGETING_SENSITIVE_FILES);
+        SystemCommandRestrictions.PREVENT_COMMAND_CHAINING,
+        SystemCommandRestrictions.PREVENT_ARGUMENTS_TARGETING_SENSITIVE_FILES);
   }
 
   /**
@@ -40,7 +33,9 @@ public final class SystemCommand {
    * @throws IllegalArgumentException if restriction is null
    */
   public static Process runCommand(
-      final Runtime runtime, final String command, final Set<Restrictions> restrictions)
+      final Runtime runtime,
+      final String command,
+      final Set<SystemCommandRestrictions> restrictions)
       throws IOException {
     runChecks(command, restrictions);
     return runtime.exec(command);
@@ -68,7 +63,9 @@ public final class SystemCommand {
    * @throws IllegalArgumentException if restriction is null
    */
   public static Process runCommand(
-      final Runtime runtime, final String[] command, final Set<Restrictions> restrictions)
+      final Runtime runtime,
+      final String[] command,
+      final Set<SystemCommandRestrictions> restrictions)
       throws IOException {
     runChecks(command, restrictions);
     return runtime.exec(command);
@@ -91,7 +88,7 @@ public final class SystemCommand {
       final Runtime runtime,
       final String[] command,
       final String[] envp,
-      final Set<Restrictions> restrictions)
+      final Set<SystemCommandRestrictions> restrictions)
       throws IOException {
     runChecks(command, restrictions);
     return runtime.exec(command, envp);
@@ -115,7 +112,7 @@ public final class SystemCommand {
       final String[] command,
       final String[] envp,
       final File dir,
-      final Set<Restrictions> restrictions)
+      final Set<SystemCommandRestrictions> restrictions)
       throws IOException {
     runChecks(command, restrictions);
     return runtime.exec(command, envp, dir);
@@ -129,7 +126,7 @@ public final class SystemCommand {
       final Runtime runtime,
       final String command,
       final String[] envp,
-      final Set<Restrictions> restrictions)
+      final Set<SystemCommandRestrictions> restrictions)
       throws IOException {
     runChecks(command, restrictions);
     return runtime.exec(command, envp);
@@ -153,7 +150,7 @@ public final class SystemCommand {
       final String command,
       final String[] envp,
       final File dir,
-      final Set<Restrictions> restrictions)
+      final Set<SystemCommandRestrictions> restrictions)
       throws IOException {
     runChecks(command, restrictions);
     return runtime.exec(command, envp, dir);
@@ -179,7 +176,8 @@ public final class SystemCommand {
     return runCommand(runtime, command, envp, dir, defaultRestrictions());
   }
 
-  private static void runChecks(final String command, final Set<Restrictions> restrictions) {
+  private static void runChecks(
+      final String command, final Set<SystemCommandRestrictions> restrictions) {
     /*
      * Our command parsing library blows up if it sees empty strings, so since we know it's safe, we
      * default to our principle of "let the app do what it normally would have done" and let Runtime#exec()
@@ -191,7 +189,8 @@ public final class SystemCommand {
     }
   }
 
-  private static void runChecks(final String[] command, final Set<Restrictions> restrictions) {
+  private static void runChecks(
+      final String[] command, final Set<SystemCommandRestrictions> restrictions) {
     final CommandLine parsedCommandLine = new CommandLine(command[0]);
     for (int i = 1; i < command.length; i++) {
       parsedCommandLine.addArgument(command[i]);
@@ -204,22 +203,23 @@ public final class SystemCommand {
    * reflecting the different signatures of {@link Runtime#exec(String)}.
    */
   private static void runChecks(
-      final CommandLine parsedCommandLine, final Set<Restrictions> restrictions) {
+      final CommandLine parsedCommandLine, final Set<SystemCommandRestrictions> restrictions) {
     if (restrictions == null) {
       throw new IllegalArgumentException("restrictions must not be null");
     }
 
-    if (restrictions.contains(Restrictions.PREVENT_COMMAND_CHAINING)) {
+    if (restrictions.contains(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)) {
       if (isShell(parsedCommandLine.getExecutable())) {
         checkForMultipleCommands(parsedCommandLine.getArguments());
       }
     }
 
-    if (restrictions.contains(Restrictions.PREVENT_COMMON_EXPLOIT_EXECUTABLES)) {
+    if (restrictions.contains(SystemCommandRestrictions.PREVENT_COMMON_EXPLOIT_EXECUTABLES)) {
       checkForBannedExecutable(parsedCommandLine);
     }
 
-    if (restrictions.contains(Restrictions.PREVENT_ARGUMENTS_TARGETING_SENSITIVE_FILES)) {
+    if (restrictions.contains(
+        SystemCommandRestrictions.PREVENT_ARGUMENTS_TARGETING_SENSITIVE_FILES)) {
       checkForSensitiveFileArguments(parsedCommandLine);
     }
   }

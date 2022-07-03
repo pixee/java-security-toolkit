@@ -1,7 +1,6 @@
 package io.pixee.security;
 
 import java.net.URL;
-import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -37,17 +36,8 @@ public interface HostValidator {
             Set.of("192.168.1.1", "3232235777", "169.254.169.254", "2852039166");
       };
 
-  /** A {@link HostValidator} that allows only hosts that match a certain pattern. */
-  class PatternBasedValidator implements HostValidator {
-    private final Pattern allowPattern;
-
-    PatternBasedValidator(final Pattern allowPattern) {
-      this.allowPattern = Objects.requireNonNull(allowPattern);
-    }
-
-    @Override
-    public boolean isAllowed(final String host) {
-      return allowPattern.matcher(host).matches();
-    }
+  /** Return a {@link HostValidator} that will validate the host name against the "allowPattern". */
+  static HostValidator fromAllowedHostPattern(final Pattern allowPattern) {
+    return new PatternBasedHostValidator(allowPattern);
   }
 }

@@ -7,7 +7,6 @@ This utility hosts a number of code security controls for various application se
 be used directly by programmers, but you may have been introduced to it by being having it directly added to you code by 
 automation.
 
-
 ## Building
 Building is meant for Java 11 and Maven 3:
 

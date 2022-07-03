@@ -5,30 +5,12 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.beans.XMLDecoder;
-import java.io.*;
+import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
-final class SafeIOTest {
-
-  @Test
-  void doesnt_read_more_than_specified() {
-    Reader br = new BufferedReader(new StringReader("123\n456"));
-    assertThrows(SecurityException.class, () -> SafeIO.boundedReadLine(br, 2));
-  }
-
-  @Test
-  void two_readlines_work() throws IOException {
-    BufferedReader br = new BufferedReader(new StringReader("123\n456"));
-    assertThat(SafeIO.boundedReadLine(br, 3), equalTo("123"));
-    assertThat(SafeIO.boundedReadLine(br, 3), equalTo("456"));
-
-    br = new BufferedReader(new StringReader("12"));
-    assertThat(SafeIO.boundedReadLine(br, 2), equalTo("12"));
-  }
+final class XMLDecoderSecurityTest {
 
   @Test
   void it_protects_xmldecoder() {
@@ -54,7 +36,7 @@ final class SafeIOTest {
       assertThat(map.get("name"), equalTo("test"));
 
       // run it again with our protection on to ensure it doesn't break anything
-      decoder = new XMLDecoder(SafeIO.toSafeXmlDecoderInputStream(getInputStreamFor(mapXml)));
+      decoder = new XMLDecoder(XMLDecoderSecurity.hardenStream(getInputStreamFor(mapXml)));
       map = (Map) decoder.readObject();
       assertThat(map.get("name"), equalTo("test"));
     }
@@ -78,23 +60,12 @@ final class SafeIOTest {
 
       // now we'll run it again, but with our protective InputStream
       final XMLDecoder protectedDecoder =
-          new XMLDecoder(SafeIO.toSafeXmlDecoderInputStream(getInputStreamFor(processBuilderXml)));
+          new XMLDecoder(XMLDecoderSecurity.hardenStream(getInputStreamFor(processBuilderXml)));
       assertThrows(SecurityException.class, () -> protectedDecoder.readObject());
     }
   }
 
   private ByteArrayInputStream getInputStreamFor(String processBuilderXml) {
     return new ByteArrayInputStream(processBuilderXml.getBytes(StandardCharsets.UTF_8));
-  }
-
-  @ParameterizedTest
-  @ValueSource(strings = {"../foo.txt", "foo.txt", "/whatever/foo.txt", (char)0x0 + "foo.txt"})
-  void it_normalizes_paths(final String path) {
-    assertThat(SafeIO.toSimpleFileName(path), equalTo("foo.txt"));
-  }
-
-  @Test
-  void it_normalizes_windows_path_safely() {
-    assertThat(SafeIO.toSimpleFileName("C:\\windows\\foo.txt"), equalTo("Cwindowsfoo.txt"));
   }
 }

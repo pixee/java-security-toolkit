@@ -12,7 +12,7 @@ import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-final class DeserializationTest {
+final class ObjectInputFiltersTest {
 
   private static DiskFileItem gadget; // this is an evil gadget type
   private static byte[] serializedGadget; // this the serialized bytes of that gadget
@@ -44,7 +44,7 @@ final class DeserializationTest {
   @Test
   void validating_ois_works() throws Exception {
     var ois =
-        Deserialization.createSafeObjectInputStream(new ByteArrayInputStream(serializedGadget));
+        ObjectInputFilters.createSafeObjectInputStream(new ByteArrayInputStream(serializedGadget));
     assertThrows(
         InvalidClassException.class,
         () -> {
@@ -56,7 +56,7 @@ final class DeserializationTest {
   @Test
   void ois_harden_works() throws Exception {
     var ois = new ObjectInputStream(new ByteArrayInputStream(serializedGadget));
-    Deserialization.enableObjectFilterIfUnprotected(ois);
+    ObjectInputFilters.enableObjectFilterIfUnprotected(ois);
     assertThrows(
         InvalidClassException.class,
         () -> {
@@ -68,7 +68,7 @@ final class DeserializationTest {
   @Test
   void objectinputfilter_works_when_none_present() throws Exception {
     ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(serializedGadget));
-    ois.setObjectInputFilter(Deserialization.hardenedObjectFilter());
+    ois.setObjectInputFilter(ObjectInputFilters.getHardenedObjectFilter());
     assertThrows(
         InvalidClassException.class,
         () -> {
@@ -90,7 +90,7 @@ final class DeserializationTest {
     {
       ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(serializedGadget));
       ois.setObjectInputFilter(
-          Deserialization.createCombinedHardenedObjectFilter(filter)); // this is our weave
+          ObjectInputFilters.createCombinedHardenedObjectFilter(filter)); // this is our weave
       assertThrows(
           InvalidClassException.class,
           () -> {
@@ -104,7 +104,7 @@ final class DeserializationTest {
       byte[] serializedBadType = serialize(new BadType());
       var ois = new ObjectInputStream(new ByteArrayInputStream(serializedBadType));
       ois.setObjectInputFilter(
-          Deserialization.createCombinedHardenedObjectFilter(filter)); // this is our weave
+          ObjectInputFilters.createCombinedHardenedObjectFilter(filter)); // this is our weave
 
       assertThrows(
           InvalidClassException.class,
@@ -118,7 +118,7 @@ final class DeserializationTest {
     {
       byte[] serializedGoodType = serialize(new GoodType());
       var ois = new ObjectInputStream(new ByteArrayInputStream(serializedGoodType));
-      ois.setObjectInputFilter(Deserialization.createCombinedHardenedObjectFilter(filter));
+      ois.setObjectInputFilter(ObjectInputFilters.createCombinedHardenedObjectFilter(filter));
       GoodType goodType = (GoodType) ois.readObject();
       assertThat(goodType, is(notNullValue()));
     }

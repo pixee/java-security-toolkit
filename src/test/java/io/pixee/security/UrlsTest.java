@@ -10,14 +10,14 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import org.junit.jupiter.api.Test;
 
-final class SSRFTest {
+final class UrlsTest {
 
   @Test
   void it_allows_good_protocols() throws MalformedURLException {
     URL url =
-        SSRF.createSafeURL(
+        Urls.create(
             "https://foo:bar@zxc.com/endpt?foo",
-            Set.of(SSRF.Protocol.HTTPS),
+            Set.of(UrlProtocol.HTTPS),
             HostValidator.ALLOW_ALL);
     assertThat(url, is(not(nullValue())));
     assertThat(url.getHost(), equalTo("zxc.com"));
@@ -28,15 +28,15 @@ final class SSRFTest {
 
   @Test
   void it_allows_any_host_when_none_specified() throws MalformedURLException {
-    SSRF.createSafeURL("https://foo:bar@zxc.com/endpt?foo", Set.of(), HostValidator.ALLOW_ALL);
+    Urls.create("https://foo:bar@zxc.com/endpt?foo", Set.of(), HostValidator.ALLOW_ALL);
   }
 
   @Test
   void it_allows_any_protocol_when_none_specified() throws MalformedURLException {
-    SSRF.createSafeURL("https://foo:bar@zxc.com/endpt?foo", Set.of(), HostValidator.ALLOW_ALL);
-    SSRF.createSafeURL("https://foo:bar@zxc.com/endpt?foo", null, HostValidator.ALLOW_ALL);
-    SSRF.createSafeURL(
-        "https://foo:bar@zxc.com/endpt?foo", Set.of(SSRF.Protocol.ANY), HostValidator.ALLOW_ALL);
+    Urls.create("https://foo:bar@zxc.com/endpt?foo", Set.of(), HostValidator.ALLOW_ALL);
+    Urls.create("https://foo:bar@zxc.com/endpt?foo", null, HostValidator.ALLOW_ALL);
+    Urls.create(
+        "https://foo:bar@zxc.com/endpt?foo", Set.of(UrlProtocol.ANY), HostValidator.ALLOW_ALL);
   }
 
   @Test
@@ -44,21 +44,19 @@ final class SSRFTest {
     assertThrows(
         SecurityException.class,
         () -> {
-          SSRF.createSafeURL(
-              "http://etc/passwd", Set.of(SSRF.Protocol.FTP), HostValidator.ALLOW_ALL);
+          Urls.create("http://etc/passwd", Set.of(UrlProtocol.FTP), HostValidator.ALLOW_ALL);
         });
   }
 
   @Test
   void it_disallows_bad_domains() throws MalformedURLException {
-    HostValidator.PatternBasedValidator allowsOnlyGoodDotCom =
-        new HostValidator.PatternBasedValidator(Pattern.compile("good\\.com"));
-    SSRF.createSafeURL("https://good.com/", Set.of(SSRF.Protocol.HTTPS), allowsOnlyGoodDotCom);
+    HostValidator allowsOnlyGoodDotCom =
+        HostValidator.fromAllowedHostPattern(Pattern.compile("good\\.com"));
+    Urls.create("https://good.com/", Set.of(UrlProtocol.HTTPS), allowsOnlyGoodDotCom);
     assertThrows(
         SecurityException.class,
         () -> {
-          SSRF.createSafeURL(
-              "https://evil.com/", Set.of(SSRF.Protocol.HTTPS), allowsOnlyGoodDotCom);
+          Urls.create("https://evil.com/", Set.of(UrlProtocol.HTTPS), allowsOnlyGoodDotCom);
         });
   }
 
@@ -66,15 +64,15 @@ final class SSRFTest {
   void it_blocks_know_bad_hosts_when_asked() throws MalformedURLException {
     // all hosts are allowed so this should work
     String awsMetadataUrl = "http://169.254.169.254/latest/meta-data";
-    SSRF.createSafeURL(awsMetadataUrl, Set.of(SSRF.Protocol.ANY), HostValidator.ALLOW_ALL);
+    Urls.create(awsMetadataUrl, Set.of(UrlProtocol.ANY), HostValidator.ALLOW_ALL);
 
     // now we try with the "block the few known bad places"
     assertThrows(
         SecurityException.class,
         () -> {
-          SSRF.createSafeURL(
+          Urls.create(
               awsMetadataUrl,
-              Set.of(SSRF.Protocol.ANY),
+              Set.of(UrlProtocol.ANY),
               HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         });
   }

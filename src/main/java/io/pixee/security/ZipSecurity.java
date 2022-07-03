@@ -11,15 +11,15 @@ import java.util.zip.ZipInputStream;
  * This type exposes helper methods to deal with attacks related to Zipping operations, most notably
  * the "zip slip" attack.
  */
-public final class Zip {
+public final class ZipSecurity {
 
-  private Zip() {}
+  private ZipSecurity() {}
 
   /**
    * Returns a {@link ZipInputStream} that will check to make sure that paths encountered in the zip
    * aren't absolute and don't contain escapes ("..") towards directories outside the zip's root.
    */
-  public static ZipInputStream createHardenedZipInputStream(
+  public static ZipInputStream createHardenedInputStream(
       final InputStream stream, final Charset charset) {
     return new HardenedZipInputStream(stream, charset);
   }
@@ -29,7 +29,7 @@ public final class Zip {
    * aren't absolute and don't contain escapes ("..") towards directories beyond the root of the
    * zip.
    */
-  public static ZipInputStream createHardenedZipInputStream(final InputStream stream) {
+  public static ZipInputStream createHardenedInputStream(final InputStream stream) {
     return new HardenedZipInputStream(stream);
   }
 

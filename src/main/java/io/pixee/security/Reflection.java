@@ -11,20 +11,36 @@ public final class Reflection {
 
   private Reflection() {}
 
-  public enum Restrictions {
-    MUST_BE_PUBLIC,
-    MUST_NOT_INVOLVE_CODE_EXECUTION
-  }
-
-  private static final Set<Restrictions> defaultRestrictions =
-      Set.of(Restrictions.MUST_NOT_INVOLVE_CODE_EXECUTION);
+  private static final Set<ReflectionRestrictions> defaultRestrictions =
+      Set.of(ReflectionRestrictions.MUST_NOT_INVOLVE_CODE_EXECUTION);
 
   /**
    * Provide the default restrictions for loading a type that will work for the vast majority of
    * applications.
    */
-  public static Set<Restrictions> defaultRestrictions() {
+  public static Set<ReflectionRestrictions> defaultRestrictions() {
     return defaultRestrictions;
+  }
+
+  /**
+   * This method sandboxes the classloading to prevent possibly types outside the expected package
+   * from being loaded, with no other restrictions enforced.
+   *
+   * @param name the name of the type to load
+   * @param expectedPackage the package name we expect the loaded type to be in
+   * @return the result of {@link Class#forName(String)}, if the type is
+   */
+  public static Class<?> loadAndVerifyPackage(final String name, final String expectedPackage)
+      throws ClassNotFoundException {
+    if (expectedPackage == null) {
+      throw new IllegalArgumentException("expectedPackage");
+    }
+    Class<?> type = loadAndVerify(name, defaultRestrictions());
+    String loadedTypeName = type.getName();
+    if (!loadedTypeName.startsWith(expectedPackage)) {
+      throw new SecurityException("unexpected package on type: " + loadedTypeName);
+    }
+    return type;
   }
 
   /** Helper method that delegates {@link Reflection#loadAndVerify(String, Set)} */
@@ -36,14 +52,15 @@ public final class Reflection {
    * This method sandboxes the classloading to prevent possibly dangerous types from being loaded.
    *
    * @param name the name of the type to load
-   * @param restrictions the set of {@link Restrictions} to apply
+   * @param restrictions the set of {@link ReflectionRestrictions} to apply
    * @return the result of {@link Class#forName(String)}, if it passes the restrictions
    */
-  public static Class<?> loadAndVerify(final String name, final Set<Restrictions> restrictions)
+  public static Class<?> loadAndVerify(
+      final String name, final Set<ReflectionRestrictions> restrictions)
       throws ClassNotFoundException {
 
     // we can do this check up front before we even load the type
-    if (restrictions.contains(Restrictions.MUST_NOT_INVOLVE_CODE_EXECUTION)) {
+    if (restrictions.contains(ReflectionRestrictions.MUST_NOT_INVOLVE_CODE_EXECUTION)) {
       for (String codeLoadingPackage : codeLoadingPackages) {
         if (name.startsWith(codeLoadingPackage)) {
           throw new SecurityException(typeNotAllowedMessage);
@@ -54,14 +71,14 @@ public final class Reflection {
     // load the type so we can do the other checks
     final Class<?> type = Class.forName(name);
 
-    if (restrictions.contains(Restrictions.MUST_BE_PUBLIC)) {
+    if (restrictions.contains(ReflectionRestrictions.MUST_BE_PUBLIC)) {
       final int modifiers = type.getModifiers();
       if (!Modifier.isPublic(modifiers)) {
         throw new SecurityException("type must be public");
       }
     }
 
-    if (restrictions.contains(Restrictions.MUST_NOT_INVOLVE_CODE_EXECUTION)) {
+    if (restrictions.contains(ReflectionRestrictions.MUST_NOT_INVOLVE_CODE_EXECUTION)) {
       if (codeLoadingTypes.contains(type)) {
         throw new SecurityException(typeNotAllowedMessage);
       }
