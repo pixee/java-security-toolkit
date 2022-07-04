@@ -6,6 +6,6 @@ package io.pixee.security;
  * @see XMLInputFactorySecurity
  */
 public enum XMLRestrictions {
-    DISALLOW_DOCTYPE,
-    DISALLOW_EXTERNAL_ENTITIES
+  DISALLOW_DOCTYPE,
+  DISALLOW_EXTERNAL_ENTITIES
 }

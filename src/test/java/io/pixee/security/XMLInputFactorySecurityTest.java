@@ -35,16 +35,22 @@ final class XMLInputFactorySecurityTest {
   }
 
   @Test
-  void it_prevents_xxe_in_xmlinputfactory_doctype_only_restriction() throws IOException, XMLStreamException {
+  void it_prevents_xxe_in_xmlinputfactory_doctype_only_restriction()
+      throws IOException, XMLStreamException {
     var exploit = generateExploit();
-    var factory = XMLInputFactorySecurity.hardenFactory(XMLInputFactory.newFactory(), Set.of(XMLRestrictions.DISALLOW_DOCTYPE));
+    var factory =
+        XMLInputFactorySecurity.hardenFactory(
+            XMLInputFactory.newFactory(), Set.of(XMLRestrictions.DISALLOW_DOCTYPE));
     assertThrows(XMLStreamException.class, () -> getSecretText(factory, exploit));
   }
 
   @Test
-  void it_prevents_xxe_in_xmlinputfactory_external_entity_only_restriction() throws IOException, XMLStreamException {
+  void it_prevents_xxe_in_xmlinputfactory_external_entity_only_restriction()
+      throws IOException, XMLStreamException {
     var exploit = generateExploit();
-    var factory = XMLInputFactorySecurity.hardenFactory(XMLInputFactory.newFactory(), Set.of(XMLRestrictions.DISALLOW_EXTERNAL_ENTITIES));
+    var factory =
+        XMLInputFactorySecurity.hardenFactory(
+            XMLInputFactory.newFactory(), Set.of(XMLRestrictions.DISALLOW_EXTERNAL_ENTITIES));
     String secretText = getSecretText(factory, exploit);
     assertThat("", equalTo(secretText)); // string is empty instead of secret!
   }

@@ -2,9 +2,7 @@ package io.pixee.security;
 
 import java.io.File;
 
-/**
- * This type offers utilities to safely deal with filenames.
- */
+/** This type offers utilities to safely deal with filenames. */
 public final class Filenames {
 
   private Filenames() {}
