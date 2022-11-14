@@ -37,6 +37,7 @@
 
     <properties>
         <fmt.goal>format</fmt.goal>
+        <gpg.skip>true</gpg.skip>
 
         <versions.junit-jupiter>5.8.1</versions.junit-jupiter>
         <versions.hamcrest>1.3</versions.hamcrest>
@@ -212,20 +213,6 @@
                         </execution>
                     </executions>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-gpg-plugin</artifactId>
-                    <version>${versions.maven-gpg-plugin}</version>
-                    <executions>
-                        <execution>
-                            <id>sign-artifacts</id>
-                            <phase>verify</phase>
-                            <goals>
-                                <goal>sign</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -273,7 +260,26 @@
             <properties>
                 <!-- when running in CI we enforce formatting rather than applying it -->
                 <fmt.goal>check</fmt.goal>
+                <gpg.skip>false</gpg.skip>
             </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${versions.maven-gpg-plugin}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
