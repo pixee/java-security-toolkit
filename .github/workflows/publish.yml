@@ -24,9 +24,9 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
       - name: "Build with Maven"
-          run: mvn -Pci verify
-            MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-            MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+        run: mvn -Pci verify
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
 
       - name: "Create release"
         uses: "marvinpinto/action-automatic-releases@latest"
@@ -39,12 +39,12 @@ jobs:
             target/java-security-*.jar
 
       - name: Publish to Maven Central
-          run: |
-            mvn \
-              --no-transfer-progress \
-              --batch-mode \
-              deploy
-          env:
-            MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-            MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-            MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSPHRASE }}
+        run: |
+          mvn \
+            --no-transfer-progress \
+            --batch-mode \
+            deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSPHRASE }}
