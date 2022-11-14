@@ -32,8 +32,6 @@ jobs:
       - name: "Create release"
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          java-version: '11'
-          distribution: 'adopt'
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           files: |
