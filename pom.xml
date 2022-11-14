@@ -47,7 +47,7 @@
         <versions.fmt-maven-plugin>2.18</versions.fmt-maven-plugin>
         <versions.maven-shade-plugin>3.2.4</versions.maven-shade-plugin>
         <versions.maven-source-plugin>2.2.1</versions.maven-source-plugin>
-        <versions.maven-gpg-plugin>1.5</versions.maven-gpg-plugin>
+        <versions.maven-gpg-plugin>3.0.1</versions.maven-gpg-plugin>
         <versions.nexus-staging-maven-plugin>1.6.7</versions.nexus-staging-maven-plugin>
         <versions.jacoco-maven-plugin>0.8.7</versions.jacoco-maven-plugin>
     </properties>
