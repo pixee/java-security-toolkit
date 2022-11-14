@@ -6,7 +6,7 @@ on:
       - "v*"
 
 jobs:
-  pre-release:
+  release:
     runs-on: "ubuntu-latest"
 
     steps:
