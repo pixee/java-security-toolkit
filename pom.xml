@@ -47,6 +47,9 @@
         <versions.fmt-maven-plugin>2.18</versions.fmt-maven-plugin>
         <versions.maven-shade-plugin>3.2.4</versions.maven-shade-plugin>
         <versions.maven-source-plugin>2.2.1</versions.maven-source-plugin>
+        <versions.maven-gpg-plugin>1.5</versions.maven-gpg-plugin>
+        <versions.nexus-staging-maven-plugin>1.6.7</versions.nexus-staging-maven-plugin>
+        <versions.jacoco-maven-plugin>0.8.7</versions.jacoco-maven-plugin>
     </properties>
 
     <dependencies>
@@ -130,7 +133,7 @@
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
                     <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>1.6.7</version>
+                    <version>${versions.nexus-staging-maven-plugin}</version>
                     <extensions>true</extensions>
                     <configuration>
                         <serverId>ossrh</serverId>
@@ -149,7 +152,7 @@
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.7</version>
+                    <version>${versions.jacoco-maven-plugin}</version>
                     <executions>
                         <execution>
                             <goals>
@@ -209,6 +212,20 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>${versions.maven-gpg-plugin}</version>
+                    <executions>
+                        <execution>
+                            <id>sign-artifacts</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>sign</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -233,6 +250,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
