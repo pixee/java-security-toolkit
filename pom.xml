@@ -49,6 +49,8 @@
         <versions.maven-source-plugin>2.2.1</versions.maven-source-plugin>
         <versions.maven-gpg-plugin>3.0.1</versions.maven-gpg-plugin>
         <versions.jacoco-maven-plugin>0.8.7</versions.jacoco-maven-plugin>
+
+        <versions.maven-deploy-plugin>3.0.0</versions.maven-deploy-plugin>
     </properties>
 
     <dependencies>
@@ -200,6 +202,11 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${versions.maven-deploy-plugin}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -228,6 +235,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
