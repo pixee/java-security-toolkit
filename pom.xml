@@ -260,6 +260,14 @@
                 <!-- when running in CI we enforce formatting rather than applying it -->
                 <fmt.goal>check</fmt.goal>
             </properties>
+        </profile>
+        <profile>
+            <id>release</id>
+            <activation>
+                <property>
+                    <name>env.RELEASE</name>
+                </property>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
