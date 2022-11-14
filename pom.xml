@@ -37,7 +37,6 @@
 
     <properties>
         <fmt.goal>format</fmt.goal>
-        <gpg.skip>true</gpg.skip>
 
         <versions.junit-jupiter>5.8.1</versions.junit-jupiter>
         <versions.hamcrest>1.3</versions.hamcrest>
@@ -260,7 +259,6 @@
             <properties>
                 <!-- when running in CI we enforce formatting rather than applying it -->
                 <fmt.goal>check</fmt.goal>
-                <gpg.skip>false</gpg.skip>
             </properties>
             <build>
                 <plugins>
@@ -275,6 +273,12 @@
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
