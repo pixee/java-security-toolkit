@@ -14,17 +14,8 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
-      - name: "Setting up Maven Central authentication"
-        uses: s4u/maven-settings-action@v2
-        with:
-          servers: '[{"id": "central", "username": "${env.ARTIFACTORY_USER}", "password": "${env.ARTIFACTORY_TOKEN}"}]'
-          githubServer: false
-
       - name: "Build with Maven"
-        env:
-          ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
-          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-        run: mvn -X --batch-mode --update-snapshots -Pci verify
+        run: mvn -Pci verify
 
       - name: "Generate Coverage Badge"
         id: jacoco

@@ -4,35 +4,36 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.openpixee</groupId>
-    <artifactId>java-code-security-toolkit</artifactId>
+    <artifactId>java-security-toolkit</artifactId>
     <version>1.0.0</version>
 
+    <name>java-security-toolkit</name>
+    <description>a library with common security controls</description>
+    <url>https://github.com/openpixee/java-security-toolkit</url>
+
+    <scm>
+        <connection>scm:git:git://github.com/openpixee/java-security-toolkit.git</connection>
+        <developerConnection>scm:git:ssh://github.com:openpixee/java-security-toolkit.git</developerConnection>
+        <url>https://github.com/openpixee/java-security-toolkit/tree/main</url>
+    </scm>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
     <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
         <repository>
-            <id>central</id>
-            <name>pixee-libs-release</name>
-            <url>https://pixee.jfrog.io/artifactory/mailman</url>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-
-    <repositories>
-        <repository>
-            <id>central</id>
-            <name>pixee-libs-release</name>
-            <url>https://pixee.jfrog.io/artifactory/mailman</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>snapshots</id>
-            <name>pixee-libs-snapshot</name>
-            <url>https://pixee.jfrog.io/artifactory/mailman</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
     <properties>
         <fmt.goal>format</fmt.goal>
@@ -113,6 +114,43 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.2.1</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.9.1</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.7</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <serverId>ossrh</serverId>
+                        <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    </configuration>
+                </plugin>
+                <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${versions.maven-compiler-plugin}</version>
                     <configuration>
@@ -186,6 +224,14 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>

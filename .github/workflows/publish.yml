@@ -12,23 +12,21 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: "Build, test and deploy"
+      - name: "Setup Java"
         uses: actions/setup-java@v2
         with:
           java-version: '11'
           distribution: 'adopt'
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
-      - name: "Setting up Artifactory authentication"
-        uses: s4u/maven-settings-action@v2
-        with:
-          servers: '[{"id": "central", "username": "${env.ARTIFACTORY_USER}", "password": "${env.ARTIFACTORY_TOKEN}"}]'
-          githubServer: false
-
-      - name: "Publish to GitHub Packages"
-        env:
-          ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
-          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-        run: mvn deploy
+      - name: "Build with Maven"
+          run: mvn -Pci verify
+            MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+            MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
 
       - name: "Create release"
         uses: "marvinpinto/action-automatic-releases@latest"
@@ -38,4 +36,15 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           files: |
-            target/java-code*.jar
+            target/java-security-*.jar
+
+      - name: Publish to Maven Central
+          run: |
+            mvn \
+              --no-transfer-progress \
+              --batch-mode \
+              deploy
+          env:
+            MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+            MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+            MAVEN_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSPHRASE }}
