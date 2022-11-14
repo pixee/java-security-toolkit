@@ -40,7 +40,7 @@ jobs:
       - name: Publish to Maven Central
         run: |
           mvn \
-            -Pci \
+            -Prelease \
             -X \
             --no-transfer-progress \
             --batch-mode \
