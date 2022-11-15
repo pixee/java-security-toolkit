@@ -35,6 +35,14 @@
         </repository>
     </distributionManagement>
 
+    <developers>
+        <developer>
+            <name>Arshan Dabirsiaghi</name>
+            <organization>openpixee</organization>
+            <organizationUrl>https://openpixee.io/</organizationUrl>
+        </developer>
+    </developers>
+
     <properties>
         <fmt.goal>format</fmt.goal>
 
