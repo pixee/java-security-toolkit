@@ -24,7 +24,6 @@ public final class XMLDecoderSecurity {
    * featured on the "transformation" front like Jackson, Gson, etc.
    *
    * @param is the stream which we want to wrap with a token-detecting protect
-   *
    * @see <a
    *     href="https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html">https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html</a>
    * @see <a
