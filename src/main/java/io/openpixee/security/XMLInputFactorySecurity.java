@@ -15,7 +15,9 @@ public final class XMLInputFactorySecurity {
 
   private XMLInputFactorySecurity() {}
 
-  /** Harden the {@link XMLInputFactory} against external entity attacks. */
+  /**
+   * Harden the {@link XMLInputFactory} against external entity attacks
+   */
   public static XMLInputFactory hardenFactory(final XMLInputFactory factory) {
     return hardenFactory(factory, Set.of(XMLRestrictions.DISALLOW_EXTERNAL_ENTITIES));
   }

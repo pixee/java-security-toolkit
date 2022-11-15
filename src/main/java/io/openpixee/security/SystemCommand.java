@@ -33,8 +33,10 @@ public final class SystemCommand {
    * @param command the system command about to be run
    * @param runtime the runtime to run with
    * @param restrictions the set of restrictions to run with
+   * @return the {@link Process} that results from the hardened {@link Runtime#exec(String)} call
    * @throws SecurityException if multiple commands are found
    * @throws IllegalArgumentException if restriction is null
+   * @throws IOException from the wrapped system process invocation call
    */
   public static Process runCommand(
       final Runtime runtime,
@@ -47,6 +49,11 @@ public final class SystemCommand {
 
   /**
    * Delegates to {@link SystemCommand#runCommand(Runtime, String, Set)} with default restrictions.
+   *
+   * @param runtime the runtime to run with
+   * @param command the system command about to be run
+   * @return the {@link Process} that results from the hardened {@link Runtime#exec(String)} call
+   * @throws IOException from the wrapped system process invocation call
    */
   public static Process runCommand(final Runtime runtime, final String command) throws IOException {
     return runCommand(runtime, command, defaultRestrictions());
@@ -63,8 +70,10 @@ public final class SystemCommand {
    * @param command the system command about to be run
    * @param runtime the runtime to run with
    * @param restrictions the set of restrictions to run with
+   * @return the {@link Process} that results from the hardened {@link Runtime#exec(String[])} call
    * @throws SecurityException if multiple commands are found
    * @throws IllegalArgumentException if restriction is null
+   * @throws IOException from the wrapped system process invocation call
    */
   public static Process runCommand(
       final Runtime runtime,
@@ -81,6 +90,8 @@ public final class SystemCommand {
    *
    * @param runtime the runtime to run with
    * @param command the system command about to be run
+   * @return the {@link Process} that results from the hardened {@link Runtime#exec(String[])} call
+   * @throws IOException from the wrapped system process invocation call
    */
   public static Process runCommand(final Runtime runtime, final String[] command)
       throws IOException {
@@ -90,6 +101,15 @@ public final class SystemCommand {
   /**
    * Same as {@link SystemCommand#runCommand(Runtime, String[], Set)} but also include more data to
    * pass into {@link Runtime#exec(String[], String[])}.
+   *
+   * @param runtime the runtime to run with
+   * @param command the system command about to be run
+   * @param envp the environment variables
+   * @param restrictions the set of restrictions to run with
+   * @return the {@link Process} that results from the hardened {@link Runtime#exec(String[])} call
+   * @throws SecurityException if multiple commands are found
+   * @throws IllegalArgumentException if restriction is null
+   * @throws IOException from the wrapped system process invocation call
    */
   public static Process runCommand(
       final Runtime runtime,
@@ -104,6 +124,13 @@ public final class SystemCommand {
   /**
    * Delegates to {@link SystemCommand#runCommand(Runtime, String[], String[], Set)} with default
    * restrictions.
+   *
+   * @param runtime the runtime to run with
+   * @param command the system command about to be run
+   * @param envp the environment variables
+   * @return the {@link Process} that results from the hardened {@link Runtime#exec(String[],
+   *     String[])} call
+   * @throws IOException from the wrapped system process invocation call
    */
   public static Process runCommand(
       final Runtime runtime, final String[] command, final String[] envp) throws IOException {
@@ -113,6 +140,15 @@ public final class SystemCommand {
   /**
    * Same as {@link SystemCommand#runCommand(Runtime, String[], Set)} but also include more data to
    * pass into {@link Runtime#exec(String[], String[], File)}.
+   *
+   * @param runtime the runtime to run with
+   * @param command the system command about to be run
+   * @param envp the environment variables
+   * @param dir the working directory to run the system command in
+   * @param restrictions the set of restrictions to run with
+   * @return the {@link Process} that results from the hardened {@link Runtime#exec(String[],
+   *     String[], File)} call
+   * @throws IOException from the wrapped system process invocation call
    */
   public static Process runCommand(
       final Runtime runtime,
@@ -128,6 +164,14 @@ public final class SystemCommand {
   /**
    * Same as {@link SystemCommand#runCommand(Runtime, String, Set)} but also include more data to
    * pass into {@link Runtime#exec(String, String[])}.
+   *
+   * @param runtime the runtime to run with
+   * @param command the system command about to be run
+   * @param envp the environment variables
+   * @param restrictions the set of restrictions to run with
+   * @return the {@link Process} that results from the hardened {@link Runtime#exec(String,
+   *     String[])} call
+   * @throws IOException from the wrapped system process invocation call
    */
   public static Process runCommand(
       final Runtime runtime,
@@ -142,6 +186,13 @@ public final class SystemCommand {
   /**
    * Delegates to {@link SystemCommand#runCommand(Runtime, String, String[], Set)} with default
    * restrictions.
+   *
+   * @param runtime the runtime to run with
+   * @param command the system command about to be run
+   * @param envp the environment variables
+   * @return the {@link Process} that results from the hardened {@link Runtime#exec(String,
+   *     String[])} call
+   * @throws IOException from the wrapped system process invocation call
    */
   public static Process runCommand(final Runtime runtime, final String command, final String[] envp)
       throws IOException {
@@ -151,6 +202,15 @@ public final class SystemCommand {
   /**
    * Same as {@link SystemCommand#runCommand(Runtime, String, Set)} but also include more data to
    * pass into {@link Runtime#exec(String, String[], File)}.
+   *
+   * @param runtime the runtime to run with
+   * @param command the system command about to be run
+   * @param envp the environment variables
+   * @param dir the working directory to run the system command in
+   * @param restrictions the set of restrictions to run with
+   * @return the {@link Process} that results from the hardened {@link Runtime#exec(String,
+   *     String[], File)} call
+   * @throws IOException from the wrapped system process invocation call
    */
   public static Process runCommand(
       final Runtime runtime,
@@ -166,6 +226,14 @@ public final class SystemCommand {
   /**
    * Delegates to {@link SystemCommand#runCommand(Runtime, String, String[], File, Set)} with
    * default restrictions.
+   *
+   * @param runtime the runtime to run with
+   * @param command the system command about to be run
+   * @param envp the environment variables
+   * @param dir the working directory to run the system command in
+   * @return the {@link Process} that results from the hardened {@link Runtime#exec(String,
+   *     String[], File)} call
+   * @throws IOException from the wrapped system process invocation call
    */
   public static Process runCommand(
       final Runtime runtime, final String command, final String[] envp, final File dir)
@@ -176,6 +244,14 @@ public final class SystemCommand {
   /**
    * Delegates to {@link SystemCommand#runCommand(Runtime, String[], String[], File, Set)} with
    * default restrictions.
+   *
+   * @param runtime the runtime to run with
+   * @param command the system command about to be run
+   * @param envp the environment variables
+   * @param dir the working directory to run the system command in
+   * @return the {@link Process} that results from the hardened {@link Runtime#exec(String[],
+   *     String[], File)} call
+   * @throws IOException from the wrapped system process invocation call
    */
   public static Process runCommand(
       final Runtime runtime, final String[] command, final String[] envp, final File dir)

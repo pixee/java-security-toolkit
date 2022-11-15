@@ -22,6 +22,9 @@ public final class ObjectInputFilters {
    * java.io.ObjectInputStream#setObjectInputFilter(ObjectInputFilter)} to protect against
    * deserialization code execution attacks. This method is meant for Java 9+ apps since it relies
    * on methods introduced in that version.
+   *
+   * @return an {@link ObjectInputFilter} to be used in {@link
+   *     ObjectInputStream#setObjectInputFilter(ObjectInputFilter)}
    */
   public static ObjectInputFilter getHardenedObjectFilter() {
     return basicGadgetDenylistFilter;

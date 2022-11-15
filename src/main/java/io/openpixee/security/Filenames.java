@@ -11,7 +11,8 @@ public final class Filenames {
    * Take an arbitrary file path (full, relative, or a simple name) and return a guaranteed simple
    * name without any directory. For instance:
    *
-   * <table summary="the inputs and outputs of the API showing all the directory elements of the paths taken out">
+   * <table>
+   *     <caption>the inputs and outputs of the API showing all the directory elements of the paths taken out</caption>
    *     <tr>
    *         <th>Input</th>
    *         <th>Output</th>

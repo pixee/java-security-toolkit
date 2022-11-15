@@ -53,6 +53,7 @@ public final class Reflection {
    *
    * @param name the name of the type to load
    * @throws ClassNotFoundException if the class is not found
+   * @return the result of {@link Class#forName(String)}, if it passes the default restrictions
    */
   public static Class<?> loadAndVerify(final String name) throws ClassNotFoundException {
     return loadAndVerify(name, defaultRestrictions());
