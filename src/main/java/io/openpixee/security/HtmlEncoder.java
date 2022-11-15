@@ -15,6 +15,7 @@ public final class HtmlEncoder {
   /**
    * Return an HTML-encoded version of the value passed in.
    *
+   * @param s the string in which to replace HTML entities
    * @return an HTML-encoded version of the String passed in, or null if the input was null
    */
   public static String encode(final String s) {

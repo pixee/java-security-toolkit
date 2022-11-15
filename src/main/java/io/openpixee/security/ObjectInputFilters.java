@@ -35,6 +35,8 @@ public final class ObjectInputFilters {
    * <p>Note: code weavers can't weave this code directly into arbitrary code because it forces you
    * to choose what to do in the try-catch block. An empty catch block may cause checkstyle
    * violations, and will look more disruptive.
+   *
+   * @param ois the reader to secure
    */
   public static void enableObjectFilterIfUnprotected(final ObjectInputStream ois) {
     var objectInputFilter = ois.getObjectInputFilter();
@@ -61,6 +63,8 @@ public final class ObjectInputFilters {
    *
    * @param existingFilter the existing filter for the call about to take place, so we can work in
    *     tandem with it
+   * @return an {@link ObjectInputFilter} to be used in {@link
+   *     ObjectInputStream#setObjectInputFilter(ObjectInputFilter)}
    */
   public static ObjectInputFilter createCombinedHardenedObjectFilter(
       final ObjectInputFilter existingFilter) {
@@ -91,6 +95,8 @@ public final class ObjectInputFilters {
    * code execution attacks. This method can be used in Java 8 and previous.
    *
    * @param ois the stream to wrap and harden
+   * @return an {@link ObjectInputStream} which is safe against all publicly known gadgets
+   * @throws IOException if the underlying creation of {@link ObjectInputStream} fails
    */
   public static ObjectInputStream createSafeObjectInputStream(final InputStream ois)
       throws IOException {

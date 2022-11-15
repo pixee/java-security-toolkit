@@ -13,6 +13,8 @@ public final class UnwantedTypes {
   /**
    * Return a {@link List} of types that are generally undesirable to deserialize from unknown
    * sources.
+   *
+   * @return the list of dangerous types to avoid deserializing
    */
   public static List<String> all() {
     return gadgets;
@@ -21,6 +23,8 @@ public final class UnwantedTypes {
   /**
    * Return a {@link String[]} of types that are generally undesirable to deserialize from unknown
    * sources.
+   *
+   * @return the list of dangerous types to avoid deserializing
    */
   public static String[] allArray() {
     return gadgetsArray;

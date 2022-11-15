@@ -11,7 +11,7 @@ public final class Filenames {
    * Take an arbitrary file path (full, relative, or a simple name) and return a guaranteed simple
    * name without any directory. For instance:
    *
-   * <table>
+   * <table summary="the inputs and outputs of the API showing all the directory elements of the paths taken out">
    *     <tr>
    *         <th>Input</th>
    *         <th>Output</th>
@@ -30,6 +30,7 @@ public final class Filenames {
    *     </tr>
    * </table>
    *
+   * @param fileName the file name to normalize
    * @return a directoryless version of a file name
    * @see <a
    *     href="https://github.com/spring-projects/spring-framework/blob/main/spring-web/src/main/java/org/springframework/web/multipart/MultipartFile.java">Spring

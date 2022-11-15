@@ -36,7 +36,12 @@ public interface HostValidator {
             Set.of("192.168.1.1", "3232235777", "169.254.169.254", "2852039166");
       };
 
-  /** Return a {@link HostValidator} that will validate the host name against the "allowPattern". */
+  /**
+   * Return a {@link HostValidator} that will validate the host name against the "allowPattern".
+   *
+   * @param allowPattern the pattern that describes allowed hosts
+   * @return a validator based on the given host pattern
+   */
   static HostValidator fromAllowedHostPattern(final Pattern allowPattern) {
     return new PatternBasedHostValidator(allowPattern);
   }

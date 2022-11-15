@@ -17,6 +17,9 @@ public final class Reflection {
   /**
    * Provide the default restrictions for loading a type that will work for the vast majority of
    * applications.
+   *
+   * @return a set of restrictions that are suitable for broad use in protecting reflection
+   *     operations
    */
   public static Set<ReflectionRestrictions> defaultRestrictions() {
     return defaultRestrictions;
@@ -29,6 +32,8 @@ public final class Reflection {
    * @param name the name of the type to load
    * @param expectedPackage the package name we expect the loaded type to be in
    * @return the result of {@link Class#forName(String)}, if the type is
+   * @throws ClassNotFoundException if the class is not found
+   * @throws SecurityException if the {@link Class} isn't in the expected package
    */
   public static Class<?> loadAndVerifyPackage(final String name, final String expectedPackage)
       throws ClassNotFoundException {
@@ -43,7 +48,12 @@ public final class Reflection {
     return type;
   }
 
-  /** Helper method that delegates {@link Reflection#loadAndVerify(String, Set)} */
+  /**
+   * Helper method that delegates {@link Reflection#loadAndVerify(String, Set)}
+   *
+   * @param name the name of the type to load
+   * @throws ClassNotFoundException if the class is not found
+   */
   public static Class<?> loadAndVerify(final String name) throws ClassNotFoundException {
     return loadAndVerify(name, defaultRestrictions());
   }
@@ -54,6 +64,7 @@ public final class Reflection {
    * @param name the name of the type to load
    * @param restrictions the set of {@link ReflectionRestrictions} to apply
    * @return the result of {@link Class#forName(String)}, if it passes the restrictions
+   * @throws ClassNotFoundException if the class is not found
    */
   public static Class<?> loadAndVerify(
       final String name, final Set<ReflectionRestrictions> restrictions)

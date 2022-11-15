@@ -13,6 +13,7 @@ public final class Jakarta {
   }
 
   private static class ApacheFilenameUtilsPathNormalizer implements PathNormalizer {
+    /** {@inheritDoc} */
     @Override
     public String normalizeOrNull(final String path) {
       return FilenameUtils.normalize(path, true);
@@ -37,12 +38,11 @@ public final class Jakarta {
       List.of(new ApacheFilenameUtilsPathNormalizer(), new UriPathNormalizer());
 
   /**
-   * Validates the path argument to {@link
-   * javax.servlet.http.HttpServletRequest#getRequestDispatcher()}, which could be used to gain
-   * access to sensitive assets like configuration files, code files, etc. This method only protects
-   * against assets that are common amongst all apps, and thus represent easier targets for
-   * attackers. If the attacker is using brute force or has insider knowledge, they could still
-   * possibly find their way into other sensitive assets.
+   * Validates the path argument to javax.servlet.http.HttpServletRequest#getRequestDispatcher(),
+   * which could be used to gain access to sensitive assets like configuration files, code files,
+   * etc. This method only protects against assets that are common amongst all apps, and thus
+   * represent easier targets for attackers. If the attacker is using brute force or has insider
+   * knowledge, they could still possibly find their way into other sensitive assets.
    *
    * @param path an argument to HttpServletRequest#getRequestDispatcher() to validate
    * @return the same String as was passed in

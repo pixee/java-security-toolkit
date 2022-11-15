@@ -24,6 +24,7 @@ public final class DocumentBuilderFactorySecurity {
    *     DocumentBuilderFactory#setExpandEntityReferences(boolean)}
    * @param allowXinclude parameter which will be passed to {@link
    *     DocumentBuilderFactory#setXIncludeAware(boolean)}
+   * @return a factory that is hardened against XML attacks (e.g., XXE)
    */
   public static DocumentBuilderFactory hardenDocumentBuilderFactory(
       final DocumentBuilderFactory factory,

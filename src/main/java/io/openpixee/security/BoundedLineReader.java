@@ -1,5 +1,6 @@
 package io.openpixee.security;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Objects;
@@ -62,10 +63,15 @@ public final class BoundedLineReader {
    *
    * <p>This code originally came from the OWASP ESAPI project:
    *
+   * @param reader the reader from which to read the line
+   * @param max the maximum number of bytes to read for the given line read
    * @see <a
    *     href="https://wiki.sei.cmu.edu/confluence/display/java/MSC05-J.+Do+not+exhaust+heap+space">https://wiki.sei.cmu.edu/confluence/display/java/MSC05-J.+Do+not+exhaust+heap+space</a>
    * @see <a
    *     href="https://github.com/vishank848/owasp-esapi-java/blob/master/src/main/java/org/owasp/esapi/reference/DefaultValidator.java">https://github.com/vishank848/owasp-esapi-java/blob/master/src/main/java/org/owasp/esapi/reference/DefaultValidator.java</a>
+   * @throws IOException when the underlying reader errors
+   * @throws IllegalArgumentException if the line being read from the reader is greater than maxO
+   * @return the same as {@link BufferedReader#readLine()} would return
    */
   public static String readLine(final Reader reader, final int max) throws IOException {
     return readLine(new BufferedReaderWrapper(reader), max);

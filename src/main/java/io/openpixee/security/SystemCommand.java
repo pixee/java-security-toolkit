@@ -11,7 +11,11 @@ public final class SystemCommand {
 
   private SystemCommand() {}
 
-  /** The default restrictions if none are specified. */
+  /**
+   * The default restrictions if none are specified.
+   *
+   * @return a set of restrictions suitable for general use
+   */
   public static Set<SystemCommandRestrictions> defaultRestrictions() {
     return Set.of(
         SystemCommandRestrictions.PREVENT_COMMAND_CHAINING,
@@ -74,6 +78,9 @@ public final class SystemCommand {
   /**
    * Delegates to {@link SystemCommand#runCommand(Runtime, String[], Set)} with default
    * restrictions.
+   *
+   * @param runtime the runtime to run with
+   * @param command the system command about to be run
    */
   public static Process runCommand(final Runtime runtime, final String[] command)
       throws IOException {
