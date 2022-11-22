@@ -1,5 +1,6 @@
 [![Actions Status](https://github.com/pixeeworks/java-security-toolkit/workflows/Java%20CI/badge.svg)](https://github.com/pixeeworks/java-security-toolkit/actions)
 ![Coverage](.github/badges/jacoco.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Java Code Security Toolkit
 
