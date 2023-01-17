@@ -35,8 +35,14 @@ final class XMLInputFactorySecurityTest {
   }
 
   @Test
-  void it_prevents_xxe_in_xmlinputfactory_doctype_only_restriction()
-      throws IOException, XMLStreamException {
+  void it_fails_when_invalid_restrictions() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> XMLInputFactorySecurity.hardenFactory(XMLInputFactory.newFactory(), Set.of()));
+  }
+
+  @Test
+  void it_prevents_xxe_in_xmlinputfactory_doctype_only_restriction() throws IOException {
     var exploit = generateExploit();
     var factory =
         XMLInputFactorySecurity.hardenFactory(

@@ -63,5 +63,9 @@ final class ReflectionTest {
     assertThrows(
         SecurityException.class,
         () -> Reflection.loadAndVerifyPackage("java.lang.String", "java.io"));
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> Reflection.loadAndVerifyPackage("java.lang.String", null));
   }
 }

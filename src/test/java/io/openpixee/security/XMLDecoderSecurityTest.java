@@ -61,7 +61,7 @@ final class XMLDecoderSecurityTest {
       // now we'll run it again, but with our protective InputStream
       final XMLDecoder protectedDecoder =
           new XMLDecoder(XMLDecoderSecurity.hardenStream(getInputStreamFor(processBuilderXml)));
-      assertThrows(SecurityException.class, () -> protectedDecoder.readObject());
+      assertThrows(SecurityException.class, protectedDecoder::readObject);
     }
   }
 

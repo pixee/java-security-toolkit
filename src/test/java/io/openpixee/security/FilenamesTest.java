@@ -1,7 +1,9 @@
 package io.openpixee.security;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.nullValue;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,5 +20,15 @@ final class FilenamesTest {
   @Test
   void it_normalizes_windows_path_safely() {
     assertThat(Filenames.toSimpleFileName("C:\\windows\\foo.txt"), equalTo("Cwindowsfoo.txt"));
+  }
+
+  @Test
+  void it_returns_null_when_null_passed() {
+    assertThat(Filenames.toSimpleFileName(null), is(nullValue()));
+  }
+
+  @Test
+  void it_returns_empty_when_empty_passed() {
+    assertThat(Filenames.toSimpleFileName(""), equalTo(""));
   }
 }
