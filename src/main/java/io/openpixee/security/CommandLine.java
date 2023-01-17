@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Vector;
 
 /**
- * This code borrowed from Apache Commons Exec:
+ * This code borrowed and slightly modified from Apache Commons Exec:
  *
  * <p>https://raw.githubusercontent.com/apache/commons-exec/master/src/main/java/org/apache/commons/exec/CommandLine.java
  *
@@ -86,37 +86,6 @@ final class CommandLine {
   }
 
   /**
-   * Create a command line without any arguments.
-   *
-   * @param executable the executable file
-   */
-  CommandLine(final File executable) {
-    this.isFile = true;
-    this.executable = toCleanExecutable(executable.getAbsolutePath());
-  }
-
-  /**
-   * Copy constructor.
-   *
-   * @param other the instance to copy
-   */
-  CommandLine(final CommandLine other) {
-    this.executable = other.getExecutable();
-    this.isFile = other.isFile();
-    this.arguments.addAll(other.arguments);
-
-    if (other.getSubstitutionMap() != null) {
-      final Map<String, Object> omap = new HashMap<>();
-      this.substitutionMap = omap;
-      final Iterator<String> iterator = other.substitutionMap.keySet().iterator();
-      while (iterator.hasNext()) {
-        final String key = iterator.next();
-        omap.put(key, other.getSubstitutionMap().get(key));
-      }
-    }
-  }
-
-  /**
    * Returns the executable.
    *
    * @return The executable
@@ -126,25 +95,6 @@ final class CommandLine {
     // specific file separator char. This is safe here since we know
     // that this is a platform specific command.
     return StringUtils.fixFileSeparatorChar(expandArgument(executable));
-  }
-
-  /**
-   * Was a file being used to set the executable?
-   *
-   * @return true if a file was used for setting the executable
-   */
-  boolean isFile() {
-    return isFile;
-  }
-
-  /**
-   * Add multiple arguments. Handles parsing of quotes and whitespace.
-   *
-   * @param addArguments An array of arguments
-   * @return The command line itself
-   */
-  CommandLine addArguments(final String[] addArguments) {
-    return this.addArguments(addArguments, true);
   }
 
   /**
@@ -162,18 +112,6 @@ final class CommandLine {
     }
 
     return this;
-  }
-
-  /**
-   * Add multiple arguments. Handles parsing of quotes and whitespace. Please note that the parsing
-   * can have undesired side-effects therefore it is recommended to build the command line
-   * incrementally.
-   *
-   * @param addArguments An string containing multiple arguments.
-   * @return The command line itself
-   */
-  CommandLine addArguments(final String addArguments) {
-    return this.addArguments(addArguments, true);
   }
 
   /**
@@ -622,17 +560,6 @@ final class CommandLine {
         return buf.append(DOUBLE_QUOTE).append(cleanedArgument).append(DOUBLE_QUOTE).toString();
       }
       return cleanedArgument;
-    }
-
-    /**
-     * Determines if this is a quoted argument - either single or double quoted.
-     *
-     * @param argument the argument to check
-     * @return true when the argument is quoted
-     */
-    static boolean isQuoted(final String argument) {
-      return argument.startsWith(SINGLE_QUOTE) && argument.endsWith(SINGLE_QUOTE)
-          || argument.startsWith(DOUBLE_QUOTE) && argument.endsWith(DOUBLE_QUOTE);
     }
   }
 }

@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ final class ZipSecurityTest {
     var entry = new ZipEntry("normal.txt");
     var is = createZipFrom(entry);
 
-    var hardenedStream = ZipSecurity.createHardenedInputStream(is);
+    var hardenedStream = ZipSecurity.createHardenedInputStream(is, StandardCharsets.UTF_8);
     var retrievedEntry = hardenedStream.getNextEntry();
     assertThat(retrievedEntry.getName(), equalTo("normal.txt"));
   }

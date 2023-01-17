@@ -1,5 +1,6 @@
 package io.openpixee.security;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -52,5 +53,15 @@ final class ReflectionTest {
   void it_loads_normal_classes(final String typeName) throws ClassNotFoundException {
     Class<?> type = Reflection.loadAndVerify(typeName);
     assertThat(type, is(not(nullValue())));
+  }
+
+  @Test
+  void it_loads_with_expected_package() throws ClassNotFoundException {
+    assertThat(
+        Reflection.loadAndVerifyPackage("java.lang.String", "java.lang"), equalTo(String.class));
+
+    assertThrows(
+        SecurityException.class,
+        () -> Reflection.loadAndVerifyPackage("java.lang.String", "java.io"));
   }
 }
