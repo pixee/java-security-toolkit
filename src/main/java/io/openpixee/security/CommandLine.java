@@ -34,9 +34,6 @@ final class CommandLine {
   /** A map of name value pairs used to expand command line arguments */
   private Map<String, ?> substitutionMap; // N.B. This can contain values other than Strings
 
-  /** Was a file being used to set the executable? */
-  private final boolean isFile;
-
   /**
    * Create a command line from a string.
    *
@@ -81,7 +78,6 @@ final class CommandLine {
    * @param executable the executable
    */
   CommandLine(final String executable) {
-    this.isFile = false;
     this.executable = toCleanExecutable(executable);
   }
 
@@ -95,41 +91,6 @@ final class CommandLine {
     // specific file separator char. This is safe here since we know
     // that this is a platform specific command.
     return StringUtils.fixFileSeparatorChar(expandArgument(executable));
-  }
-
-  /**
-   * Add multiple arguments.
-   *
-   * @param addArguments An array of arguments
-   * @param handleQuoting Add the argument with/without handling quoting
-   * @return The command line itself
-   */
-  CommandLine addArguments(final String[] addArguments, final boolean handleQuoting) {
-    if (addArguments != null) {
-      for (final String addArgument : addArguments) {
-        addArgument(addArgument, handleQuoting);
-      }
-    }
-
-    return this;
-  }
-
-  /**
-   * Add multiple arguments. Handles parsing of quotes and whitespace. Please note that the parsing
-   * can have undesired side-effects therefore it is recommended to build the command line
-   * incrementally.
-   *
-   * @param addArguments An string containing multiple arguments.
-   * @param handleQuoting Add the argument with/without handling quoting
-   * @return The command line itself
-   */
-  CommandLine addArguments(final String addArguments, final boolean handleQuoting) {
-    if (addArguments != null) {
-      final String[] argumentsArray = translateCommandline(addArguments);
-      addArguments(argumentsArray, handleQuoting);
-    }
-
-    return this;
   }
 
   /**
@@ -473,22 +434,6 @@ final class CommandLine {
       }
 
       return argBuf;
-    }
-
-    /**
-     * Split a string into an array of strings based on a separator.
-     *
-     * @param input what to split
-     * @param splitChar what to split on
-     * @return the array of strings
-     */
-    static String[] split(final String input, final String splitChar) {
-      final StringTokenizer tokens = new StringTokenizer(input, splitChar);
-      final List<String> strList = new ArrayList<>();
-      while (tokens.hasMoreTokens()) {
-        strList.add(tokens.nextToken());
-      }
-      return strList.toArray(new String[strList.size()]);
     }
 
     /**
