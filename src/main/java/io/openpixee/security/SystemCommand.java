@@ -431,14 +431,6 @@ public final class SystemCommand {
     return -1;
   }
 
-  private static String[] trim(final String[] commandTokens) {
-    final String[] trimmed = new String[commandTokens.length];
-    for (int i = 0; i < commandTokens.length; i++) {
-      trimmed[i] = commandTokens[i].trim();
-    }
-    return trimmed;
-  }
-
   /**
    * Check if one of the tokens if contains the "command" command line option for shells which runs
    * the command given in the next argument.

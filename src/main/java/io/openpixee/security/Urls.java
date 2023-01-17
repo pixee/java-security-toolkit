@@ -28,20 +28,20 @@ public final class Urls {
 
   /** Convenience method which delegates to {@link Urls#create(URL, Set, HostValidator)}. */
   public static URL create(
-      final String url,
+      final String protocol,
       final String host,
       final int port,
       final String file,
       final Set<UrlProtocol> allowedProtocols,
       final HostValidator hostValidator)
       throws MalformedURLException {
-    final URL u = new URL(url, host, port, file);
+    final URL u = new URL(protocol, host, port, file);
     return create(u, allowedProtocols, hostValidator);
   }
 
   /** Convenience method which delegates to {@link Urls#create(URL, Set, HostValidator)}. */
   public static URL create(
-      final String url,
+      final String protocol,
       final String host,
       final int port,
       final String file,
@@ -49,30 +49,30 @@ public final class Urls {
       final Set<UrlProtocol> allowedProtocols,
       final HostValidator hostValidator)
       throws MalformedURLException {
-    final URL u = new URL(url, host, port, file, handler);
+    final URL u = new URL(protocol, host, port, file, handler);
     return create(u, allowedProtocols, hostValidator);
   }
 
   /** Convenience method which delegates to {@link Urls#create(URL, Set, HostValidator)}. */
   public static URL create(
-      final URL url,
+      final URL context,
       final String spec,
       final Set<UrlProtocol> allowedProtocols,
       final HostValidator hostValidator)
       throws MalformedURLException {
-    final URL u = new URL(url, spec);
+    final URL u = new URL(context, spec);
     return create(u, allowedProtocols, hostValidator);
   }
 
   /** Convenience method which delegates to {@link Urls#create(URL, Set, HostValidator)}. */
   public static URL create(
-      final URL url,
+      final URL context,
       final String spec,
       final URLStreamHandler handler,
       final Set<UrlProtocol> allowedProtocols,
       final HostValidator hostValidator)
       throws MalformedURLException {
-    final URL u = new URL(url, spec, handler);
+    final URL u = new URL(context, spec, handler);
     return create(u, allowedProtocols, hostValidator);
   }
 
