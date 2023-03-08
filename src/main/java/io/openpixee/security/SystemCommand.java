@@ -1,5 +1,6 @@
 package io.openpixee.security;
 
+import io.openpixee.security.SystemCommand;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -44,7 +45,7 @@ public final class SystemCommand {
       final Set<SystemCommandRestrictions> restrictions)
       throws IOException {
     runChecks(command, restrictions);
-    return runtime.exec(command);
+    return SystemCommand.runCommand(runtime, command);
   }
 
   /**
@@ -81,7 +82,7 @@ public final class SystemCommand {
       final Set<SystemCommandRestrictions> restrictions)
       throws IOException {
     runChecks(command, restrictions);
-    return runtime.exec(command);
+    return SystemCommand.runCommand(runtime, command);
   }
 
   /**
@@ -118,7 +119,7 @@ public final class SystemCommand {
       final Set<SystemCommandRestrictions> restrictions)
       throws IOException {
     runChecks(command, restrictions);
-    return runtime.exec(command, envp);
+    return SystemCommand.runCommand(runtime, command, envp);
   }
 
   /**
@@ -158,7 +159,7 @@ public final class SystemCommand {
       final Set<SystemCommandRestrictions> restrictions)
       throws IOException {
     runChecks(command, restrictions);
-    return runtime.exec(command, envp, dir);
+    return SystemCommand.runCommand(runtime, command, envp, dir);
   }
 
   /**
@@ -180,7 +181,7 @@ public final class SystemCommand {
       final Set<SystemCommandRestrictions> restrictions)
       throws IOException {
     runChecks(command, restrictions);
-    return runtime.exec(command, envp);
+    return SystemCommand.runCommand(runtime, command, envp);
   }
 
   /**
@@ -220,7 +221,7 @@ public final class SystemCommand {
       final Set<SystemCommandRestrictions> restrictions)
       throws IOException {
     runChecks(command, restrictions);
-    return runtime.exec(command, envp, dir);
+    return SystemCommand.runCommand(runtime, command, envp, dir);
   }
 
   /**
