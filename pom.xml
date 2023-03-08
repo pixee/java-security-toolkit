@@ -60,6 +60,7 @@
 
         <versions.maven-javadoc-plugin>2.9.1</versions.maven-javadoc-plugin>
         <versions.nexus-staging-maven-plugin>1.6.13</versions.nexus-staging-maven-plugin>
+        <versions.java-security-toolkit>1.0.0</versions.java-security-toolkit>
     </properties>
 
     <dependencies>
@@ -121,6 +122,10 @@
             <artifactId>mockito-core</artifactId>
             <version>4.0.0</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.openpixee</groupId>
+            <artifactId>java-security-toolkit</artifactId>
         </dependency>
     </dependencies>
 
@@ -322,5 +327,13 @@
             </build>
         </profile>
     </profiles>
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.openpixee</groupId>
+                <artifactId>java-security-toolkit</artifactId>
+                <version>${versions.java-security-toolkit}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
