@@ -3,18 +3,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.openpixee</groupId>
+    <groupId>io.github.pixee</groupId>
     <artifactId>java-security-toolkit</artifactId>
     <version>1.0.1-SNAPSHOT</version>
 
     <name>java-security-toolkit</name>
     <description>a library with common security controls</description>
-    <url>https://github.com/openpixee/java-security-toolkit</url>
+    <url>https://github.com/pixee/java-security-toolkit</url>
 
     <scm>
-        <connection>scm:git:git://github.com/openpixee/java-security-toolkit.git</connection>
-        <developerConnection>scm:git:ssh://github.com:openpixee/java-security-toolkit.git</developerConnection>
-        <url>https://github.com/openpixee/java-security-toolkit/tree/main</url>
+        <connection>scm:git:git://github.com/pixee/java-security-toolkit.git</connection>
+        <developerConnection>scm:git:ssh://github.com:pixee/java-security-toolkit.git</developerConnection>
+        <url>https://github.com/pixee/java-security-toolkit/tree/main</url>
     </scm>
 
     <licenses>
@@ -38,8 +38,8 @@
     <developers>
         <developer>
             <name>Arshan Dabirsiaghi</name>
-            <organization>openpixee</organization>
-            <organizationUrl>https://openpixee.io/</organizationUrl>
+            <organization>pixee</organization>
+            <organizationUrl>https://pixee.ai/</organizationUrl>
         </developer>
     </developers>
 
