@@ -1,4 +1,4 @@
-package io.github.pixee.security;
+package io.github.pixee.security.jakarta;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.commons.io.FilenameUtils;
 
 /** This type exposes helper methods that will help defend against Jakarta EE-specific attacks. */
-public final class Jakarta {
+public final class PathValidator {
 
   private interface PathNormalizer {
     String normalizeOrNull(String path);
@@ -49,7 +49,7 @@ public final class Jakarta {
    * @throws SecurityException if the path seems to be targeting sensitive Jakarta web application
    *     assets
    */
-  public static String validateForwardPath(final String path) {
+  public static String validateDispatcherPath(final String path) {
     if (path == null) {
       return null;
     }

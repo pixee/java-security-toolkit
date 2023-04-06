@@ -1,4 +1,4 @@
-package io.github.pixee.security;
+package io.github.pixee.security.jakarta;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-final class JakartaTest {
+final class PathValidatorTest {
 
   /**
-   * Makes sure that {@link Jakarta#validateForwardPath(String)} protects against common attack
+   * Makes sure that {@link PathValidator#validateDispatcherPath(String)} protects against common attack
    * targets.
    */
   @ParameterizedTest
@@ -29,7 +29,7 @@ final class JakartaTest {
         "WEB-INF/test" + (char) 0x00
       })
   void it_protects_against_attacks(String safePath) {
-    assertThrows(SecurityException.class, () -> Jakarta.validateForwardPath(safePath));
+    assertThrows(SecurityException.class, () -> PathValidator.validateDispatcherPath(safePath));
   }
 
   @ParameterizedTest
@@ -42,11 +42,11 @@ final class JakartaTest {
         "/relative/../file.html"
       })
   void it_allows_normal_paths(String normalPath) {
-    assertThat(Jakarta.validateForwardPath(normalPath), is(normalPath));
+    assertThat(PathValidator.validateDispatcherPath(normalPath), is(normalPath));
   }
 
   @Test
   void it_passes_null() {
-    assertThat(Jakarta.validateForwardPath(null), is(nullValue()));
+    assertThat(PathValidator.validateDispatcherPath(null), is(nullValue()));
   }
 }
