@@ -12,8 +12,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 final class PathValidatorTest {
 
   /**
-   * Makes sure that {@link PathValidator#validateDispatcherPath(String)} protects against common attack
-   * targets.
+   * Makes sure that {@link PathValidator#validateDispatcherPath(String)} protects against common
+   * attack targets.
    */
   @ParameterizedTest
   @ValueSource(
