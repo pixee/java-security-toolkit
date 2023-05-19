@@ -29,3 +29,9 @@ There doesn't seem any practical way to measure this balance. We should just ens
 Examples of APIs we want to avoid:
 * `SafeIO#safeReadLine(reader, 5000000)`. This API may be safe, it's not clear _why_ our change is making it safe and thus the developer may have less trust in it. It's also a bit risky because there may be future attacks against which this API doesn't protect, and this may be misleading.
 * `Deserialization#createPubliclyKnownGadgetFilter()`. This API will help with deserialization attacks but unless the developer is intimately aware of how deserialization exploits work, this API looks like undecipherable nonsense. Given that, it seems we must balance the name of the API towards something that is slightly less specific.
+
+# Code Quality
+
+All code must be thoroughly tested.
+
+New methods that solve problems involving specific libraries (e.g., Jackson) should be delivered in their own `java-security-toolkit-$LIBRARY` artifact. We already have an example of this with the [XStream security toolkit](https://github.com/pixee/java-security-toolkit-xstream), which helps secure [XStream library](https://x-stream.github.io/) usage. We want to do this so this library can require minimal dependencies so it continues to be easy to integrate, and the attack surface stays small. If you have ideas or proposals for APIs from other libraries to protect, please open an issue!
