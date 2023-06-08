@@ -5,7 +5,7 @@
 
     <groupId>io.github.pixee</groupId>
     <artifactId>java-security-toolkit</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 
     <name>java-security-toolkit</name>
     <description>a library with common security controls</description>
@@ -114,6 +114,12 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
             <version>${versions.hamcrest}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>4.0.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>

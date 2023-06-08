@@ -1,6 +1,8 @@
 package io.github.pixee.security;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This type is only intended to hold a list of types that we don't want to deserialize because they
@@ -11,25 +13,56 @@ public final class UnwantedTypes {
   private UnwantedTypes() {}
 
   /**
-   * Return a {@link List} of types that are generally undesirable to deserialize from unknown
-   * sources.
+   * Return a {@link List} of class names and parts of class names that represent unwanted types.
+   * These types are generally undesirable to deserialize or introspect/execute from unknown
+   * sources. This list represents publicly known types but future research could uncover new types
+   * that are dangerous.
    *
-   * @return the list of dangerous types to avoid deserializing
+   * <p>To use this list effectively, you should see if any of these tokens are in the type name you
+   * are considering interacting with. For example, this code is wrong and dangerous:
+   *
+   * <pre>{@code
+   * String className = userRequest.getType();
+   * if(UnwantedTypes.allTokens().contains(className)) { // wrong!
+   *   doSomethingWith(className);
+   * }
+   * }</pre>
+   *
+   * While this code is
+   *
+   * <pre>{@code
+   * String className = userRequest.getType();
+   * if(UnwantedTypes.allTokens().noneMatch(c -> className.contains(c))) { // right
+   *   doSomethingWith(className);
+   * }
+   * }</pre>
+   *
+   * If you just want to check if a class name is potentially unsafe, use {@link
+   * #isUnwanted(String)} instead.
+   *
+   * @return a {@link List} of dangerous types to avoid deserializing
    */
-  public static List<String> all() {
-    return gadgets;
+  public static List<String> dangerousClassNameTokens() {
+    return combinedGadgetTokens;
   }
 
   /**
-   * Return a {@link String[]} of types that are generally undesirable to deserialize from unknown
-   * sources.
+   * Return true if the given class name is a known unwanted type. Note that this will return true
+   * even for classes that have been shaded into another package.
    *
-   * @return the list of dangerous types to avoid deserializing
+   * @param className a fully qualified class name to check
+   * @return true if the given class name is a known unwanted type, false otherwise
    */
-  public static String[] allArray() {
-    return gadgetsArray;
+  public static boolean isUnwanted(final String className) {
+    for (String gadgetToken : dangerousClassNameTokens()) {
+      if (className.contains(gadgetToken)) {
+        return true;
+      }
+    }
+    return false;
   }
 
+  /** A list of types known to be involved in deserialization and remote code execution attacks. */
   private static final List<String> gadgets =
       List.of(
           " org.apache.commons.beanutils.BeanComparator".substring(1),
@@ -62,31 +95,48 @@ public final class UnwantedTypes {
           "com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl",
           "com.sun.org.apache.xalan.internal.xsltc.trax.TrAXFilter",
           "com.sun.rowset.JdbcRowSetImpl",
-          "com.sun.rowset.JdbcRowSetImpl$",
           "com.sun.syndication.feed.impl.ObjectBean",
           "com.sun.xml.internal.bind.v2.runtime.unmarshaller.Base64Data",
           "com.xuggle.ferry.AtomicInteger",
           "groovy.util.Expando",
           "java.lang.ProcessBuilder",
           "java.net.PlainDatagramSocketImpl",
-          "java.rmi.registry.Registry$",
-          "java.rmi.server.ObjID$",
-          "java.rmi.server.RemoteObjectInvocationHandler$",
           "java.rmi.server.UnicastRemoteObject",
           "java.util.ServiceLoader$LazyIterator",
           "java.util.logging.FileHandler",
           "javax.imageio.ImageIO$ContainsFilter",
           "javax.management.BadAttributeValueExpException",
-          "javax.xml.transform.Templates$",
           "mozilla.javascript.ScriptableObject$GetterSlot",
           "mozilla.javascript.ScriptableObject$RelinkedSlot",
           "mozilla.javascript.ScriptableObject$Slot",
           "mozilla.javascript.internal.NativeError",
+          "org.codehaus.groovy.runtime.ConvertedClosure",
+          "org.codehaus.groovy.runtime.MethodClosure",
+          "org.jboss.weld.interceptor.reader.DefaultMethodMetadata",
+          "org.jpedal.io.ObjectStore",
+          "org.python.core.PyBytecode",
+          "org.python.core.PyFunction",
+          "org.springframework.aop.framework.AdvisedSupport",
+          "org.springframework.beans.factory.ObjectFactory",
+          "org.springframework.beans.factory.ObjectFactory",
+          "org.springframework.beans.factory.config.PropertyPathFactoryBean",
+          "sun.rmi.server.UnicastRef",
+          "sun.rmi.transport.DGCClient$EndpointEntry");
+
+  /**
+   * A list of class name common roots that have been known to be involved in deserialization and
+   * remote code execution attacks.
+   */
+  private static final List<String> gadgetPrefixes =
+      List.of(
+          "com.sun.rowset.JdbcRowSetImpl$",
+          "java.rmi.registry.Registry$",
+          "java.rmi.server.ObjID$",
+          "java.rmi.server.RemoteObjectInvocationHandler$",
+          "javax.xml.transform.Templates$",
           "net.sf.json.JSONObject$",
           "org.apache.myfaces.el.CompositeELResolver$",
           "org.apache.myfaces.el.unified.FacesELContext$",
-          "org.codehaus.groovy.runtime.ConvertedClosure",
-          "org.codehaus.groovy.runtime.MethodClosure",
           "org.hibernate.engine.spi.TypedValue$",
           "org.hibernate.tuple.component.AbstractComponentTuplizer$",
           "org.hibernate.tuple.component.PojoComponentTuplizer$",
@@ -119,19 +169,10 @@ public final class UnwantedTypes {
           "org.jboss.weld.interceptor.spi.metadata.MethodMetadata$",
           "org.jboss.weld.interceptor.spi.model.InterceptionModel$",
           "org.jboss.weld.interceptor.spi.model.InterceptionType$",
-          "org.jboss.weld.interceptor.reader.DefaultMethodMetadata",
-          "org.jpedal.io.ObjectStore",
-          "org.python.core.PyBytecode",
           "org.python.core.PyBytecode$",
-          "org.python.core.PyFunction",
           "org.python.core.PyFunction$",
-          "org.python.core.PyObject$",
-          "org.springframework.aop.framework.AdvisedSupport",
-          "org.springframework.beans.factory.ObjectFactory",
-          "org.springframework.beans.factory.ObjectFactory",
-          "org.springframework.beans.factory.config.PropertyPathFactoryBean",
-          "sun.rmi.server.UnicastRef",
-          "sun.rmi.transport.DGCClient$EndpointEntry");
+          "org.python.core.PyObject$");
 
-  private static final String[] gadgetsArray = gadgets.toArray(new String[0]);
+  private static final List<String> combinedGadgetTokens =
+      Stream.concat(gadgets.stream(), gadgetPrefixes.stream()).collect(Collectors.toList());
 }

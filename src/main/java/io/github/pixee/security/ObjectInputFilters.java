@@ -10,8 +10,9 @@ import org.apache.commons.io.serialization.ValidatingObjectInputStream;
 /**
  * This type exposes helper methods that will help defend against Java deserialization attacks.
  *
- * <p>For more information on deserialization:
- * https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html
+ * <p>For more information on deserialization checkout the <a
+ * href="https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html">OWASP
+ * Cheat Sheet</a>.
  */
 public final class ObjectInputFilters {
 
@@ -105,8 +106,8 @@ public final class ObjectInputFilters {
       throws IOException {
     try {
       final ValidatingObjectInputStream is = new ValidatingObjectInputStream(ois);
-      for (String gadget : UnwantedTypes.all()) {
-        is.reject("*" + gadget);
+      for (String gadget : UnwantedTypes.dangerousClassNameTokens()) {
+        is.reject("*" + gadget + "*");
       }
       return is;
     } catch (IOException e) {
@@ -118,5 +119,6 @@ public final class ObjectInputFilters {
   }
 
   private static final ObjectInputFilter basicGadgetDenylistFilter =
-      ObjectInputFilter.Config.createFilter("!" + String.join(";!", UnwantedTypes.all()));
+      ObjectInputFilter.Config.createFilter(
+          "!" + String.join("*;!", UnwantedTypes.dangerousClassNameTokens()));
 }

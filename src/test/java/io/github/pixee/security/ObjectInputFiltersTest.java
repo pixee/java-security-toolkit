@@ -1,10 +1,10 @@
 package io.github.pixee.security;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.*;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -38,7 +38,7 @@ final class ObjectInputFiltersTest {
   void default_is_unprotected() throws Exception {
     var ois = new ObjectInputStream(new ByteArrayInputStream(serializedGadget));
     Object o = ois.readObject();
-    assertThat(o instanceof DiskFileItem, is(true));
+    assertThat(o, instanceOf(DiskFileItem.class));
   }
 
   @Test
@@ -89,8 +89,8 @@ final class ObjectInputFiltersTest {
             "!" + BadType.class.getName() + ";" + GoodType.class.getName());
     {
       ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(serializedGadget));
-      ois.setObjectInputFilter(
-          ObjectInputFilters.createCombinedHardenedObjectFilter(filter)); // this is our weave
+      // this joins the default filter to the existing
+      ois.setObjectInputFilter(ObjectInputFilters.createCombinedHardenedObjectFilter(filter));
       assertThrows(
           InvalidClassException.class,
           () -> {
@@ -122,6 +122,29 @@ final class ObjectInputFiltersTest {
       GoodType goodType = (GoodType) ois.readObject();
       assertThat(goodType, is(notNullValue()));
     }
+  }
+
+  @Test
+  void the_filter_works_as_expected() {
+    ObjectInputFilter filter = ObjectInputFilters.getHardenedObjectFilter();
+    ObjectInputFilter.FilterInfo filterInfo = mock(ObjectInputFilter.FilterInfo.class);
+
+    // we never want to interfere with existing logic, so we never explicitly approve anything, even
+    // innocent j.l.String
+    doReturn(String.class).when(filterInfo).serialClass();
+    ObjectInputFilter.Status status = filter.checkInput(filterInfo);
+    assertThat(status, is(ObjectInputFilter.Status.UNDECIDED));
+
+    // this confirm that the exact match of ProcessBuilder in our list is caught by the filter
+    doReturn(ProcessBuilder.class).when(filterInfo).serialClass();
+    ObjectInputFilter.Status exactMatch = filter.checkInput(filterInfo);
+    assertThat(exactMatch, is(ObjectInputFilter.Status.REJECTED));
+
+    // this confirms that although the Redirect type is not explicitly in the tokens, it's still
+    // caught by the wildcard
+    doReturn(ProcessBuilder.Redirect.class).when(filterInfo).serialClass();
+    ObjectInputFilter.Status partialMatch = filter.checkInput(filterInfo);
+    assertThat(partialMatch, is(ObjectInputFilter.Status.REJECTED));
   }
 
   byte[] serialize(Serializable s) throws IOException {
