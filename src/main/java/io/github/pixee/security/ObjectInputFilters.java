@@ -43,7 +43,7 @@ public final class ObjectInputFilters {
    * @param ois the reader to secure
    */
   public static void enableObjectFilterIfUnprotected(final ObjectInputStream ois) {
-    var objectInputFilter = ois.getObjectInputFilter();
+    ObjectInputFilter objectInputFilter = ois.getObjectInputFilter();
     if (objectInputFilter == null) {
       try {
         ois.setObjectInputFilter(basicGadgetDenylistFilter);

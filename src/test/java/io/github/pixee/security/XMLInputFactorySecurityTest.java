@@ -13,6 +13,7 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 
@@ -20,16 +21,16 @@ final class XMLInputFactorySecurityTest {
 
   @Test
   void xxe_works_in_xmlinputfactory() throws IOException, XMLStreamException {
-    var exploit = generateExploit();
-    var factory = XMLInputFactory.newFactory();
+    String exploit = generateExploit();
+    XMLInputFactory factory = XMLInputFactory.newFactory();
     String secretText = getSecretText(factory, exploit);
     assertThat("s3cr3t", equalTo(secretText));
   }
 
   @Test
   void it_prevents_xxe_in_xmlinputfactory() throws IOException, XMLStreamException {
-    var exploit = generateExploit();
-    var factory = XMLInputFactorySecurity.hardenFactory(XMLInputFactory.newFactory());
+    String exploit = generateExploit();
+    XMLInputFactory factory = XMLInputFactorySecurity.hardenFactory(XMLInputFactory.newFactory());
     String secretText = getSecretText(factory, exploit);
     assertThat("", equalTo(secretText)); // string is empty instead of secret!
   }
@@ -43,8 +44,8 @@ final class XMLInputFactorySecurityTest {
 
   @Test
   void it_prevents_xxe_in_xmlinputfactory_doctype_only_restriction() throws IOException {
-    var exploit = generateExploit();
-    var factory =
+    String exploit = generateExploit();
+    XMLInputFactory factory =
         XMLInputFactorySecurity.hardenFactory(
             XMLInputFactory.newFactory(), Set.of(XMLRestrictions.DISALLOW_DOCTYPE));
     assertThrows(XMLStreamException.class, () -> getSecretText(factory, exploit));
@@ -53,8 +54,8 @@ final class XMLInputFactorySecurityTest {
   @Test
   void it_prevents_xxe_in_xmlinputfactory_external_entity_only_restriction()
       throws IOException, XMLStreamException {
-    var exploit = generateExploit();
-    var factory =
+    String exploit = generateExploit();
+    XMLInputFactory factory =
         XMLInputFactorySecurity.hardenFactory(
             XMLInputFactory.newFactory(), Set.of(XMLRestrictions.DISALLOW_EXTERNAL_ENTITIES));
     String secretText = getSecretText(factory, exploit);
@@ -62,7 +63,7 @@ final class XMLInputFactorySecurityTest {
   }
 
   private String generateExploit() throws IOException {
-    var exploit =
+    String exploit =
         FileUtils.readFileToString(new File("src/test/resources/xxe.xml"), StandardCharsets.UTF_8);
     exploit =
         exploit.replace("$PATH$", new File("src/test/resources/secret.txt").getAbsolutePath());
@@ -71,7 +72,7 @@ final class XMLInputFactorySecurityTest {
 
   private String getSecretText(final XMLInputFactory factory, final String exploit)
       throws XMLStreamException {
-    var xmlEventReader = factory.createXMLEventReader(new StringReader(exploit));
+    XMLEventReader xmlEventReader = factory.createXMLEventReader(new StringReader(exploit));
     eatEventsUntil(xmlEventReader, StartElement.class);
     return xmlEventReader.getElementText();
   }
@@ -79,7 +80,7 @@ final class XMLInputFactorySecurityTest {
   private <T> void eatEventsUntil(XMLEventReader xmlEventReader, Class<T> type)
       throws XMLStreamException {
     while (xmlEventReader.hasNext()) {
-      var xmlEvent = xmlEventReader.nextEvent();
+      XMLEvent xmlEvent = xmlEventReader.nextEvent();
       if (type.isAssignableFrom((xmlEvent.getClass()))) {
         return;
       }

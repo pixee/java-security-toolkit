@@ -366,11 +366,11 @@ public final class SystemCommand {
   }
 
   private static int findCommandSeparator(final String command) {
-    var context = new LinkedList<CommandParsingContext>();
-    var i = 0;
+    LinkedList<CommandParsingContext> context = new LinkedList<>();
+    int i = 0;
     context.push(CommandParsingContext.DEFAULT);
     while (i < command.length()) {
-      var currentContext = context.peek();
+      CommandParsingContext currentContext = context.peek();
       switch (currentContext) {
         case DOUBLE_QUOTE:
           i = eatUntilNextDoubleQuote(command, i);

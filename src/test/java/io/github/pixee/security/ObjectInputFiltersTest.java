@@ -19,7 +19,7 @@ final class ObjectInputFiltersTest {
 
   @BeforeAll
   static void setup() throws IOException {
-    var baos = new ByteArrayOutputStream();
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
     gadget =
         new DiskFileItem(
             "fieldName",
@@ -29,21 +29,21 @@ final class ObjectInputFiltersTest {
             100,
             Files.createTempDirectory("adi").toFile());
     gadget.getOutputStream(); // needed to make the object serializable
-    var oos = new ObjectOutputStream(baos);
+    ObjectOutputStream oos = new ObjectOutputStream(baos);
     oos.writeObject(gadget);
     serializedGadget = baos.toByteArray();
   }
 
   @Test
   void default_is_unprotected() throws Exception {
-    var ois = new ObjectInputStream(new ByteArrayInputStream(serializedGadget));
+    ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(serializedGadget));
     Object o = ois.readObject();
     assertThat(o, instanceOf(DiskFileItem.class));
   }
 
   @Test
   void validating_ois_works() throws Exception {
-    var ois =
+    ObjectInputStream ois =
         ObjectInputFilters.createSafeObjectInputStream(new ByteArrayInputStream(serializedGadget));
     assertThrows(
         InvalidClassException.class,
@@ -55,7 +55,7 @@ final class ObjectInputFiltersTest {
 
   @Test
   void ois_harden_works() throws Exception {
-    var ois = new ObjectInputStream(new ByteArrayInputStream(serializedGadget));
+    ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(serializedGadget));
     ObjectInputFilters.enableObjectFilterIfUnprotected(ois);
     assertThrows(
         InvalidClassException.class,
@@ -84,7 +84,7 @@ final class ObjectInputFiltersTest {
    */
   @Test
   void objectinputfilter_works_and_honors_existing() throws Exception {
-    var filter =
+    ObjectInputFilter filter =
         ObjectInputFilter.Config.createFilter(
             "!" + BadType.class.getName() + ";" + GoodType.class.getName());
     {
@@ -102,7 +102,7 @@ final class ObjectInputFiltersTest {
     // make sure we still reject the bad type
     {
       byte[] serializedBadType = serialize(new BadType());
-      var ois = new ObjectInputStream(new ByteArrayInputStream(serializedBadType));
+      ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(serializedBadType));
       ois.setObjectInputFilter(
           ObjectInputFilters.createCombinedHardenedObjectFilter(filter)); // this is our weave
 
@@ -117,7 +117,7 @@ final class ObjectInputFiltersTest {
     // make we still allow the good type
     {
       byte[] serializedGoodType = serialize(new GoodType());
-      var ois = new ObjectInputStream(new ByteArrayInputStream(serializedGoodType));
+      ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(serializedGoodType));
       ois.setObjectInputFilter(ObjectInputFilters.createCombinedHardenedObjectFilter(filter));
       GoodType goodType = (GoodType) ois.readObject();
       assertThat(goodType, is(notNullValue()));
@@ -148,7 +148,7 @@ final class ObjectInputFiltersTest {
   }
 
   byte[] serialize(Serializable s) throws IOException {
-    var stream = new ByteArrayOutputStream();
+    ByteArrayOutputStream stream = new ByteArrayOutputStream();
     new ObjectOutputStream(stream).writeObject(s);
     return stream.toByteArray();
   }

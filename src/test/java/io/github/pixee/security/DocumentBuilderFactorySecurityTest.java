@@ -10,21 +10,22 @@ import java.nio.charset.StandardCharsets;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
+import org.w3c.dom.Document;
 
 final class DocumentBuilderFactorySecurityTest {
 
   @Test
   void xxe_works_in_dbf() throws Exception {
-    var exploit = generateExploit();
-    var factory = DocumentBuilderFactory.newInstance();
+    String exploit = generateExploit();
+    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     String secretText = getSecretText(factory, exploit);
     assertThat("s3cr3t", equalTo(secretText)); // string is empty instead of secret!
   }
 
   @Test
   void it_prevents_xxe_in_dbf() throws Exception {
-    var exploit = generateExploit();
-    var factory =
+    String exploit = generateExploit();
+    DocumentBuilderFactory factory =
         DocumentBuilderFactorySecurity.hardenDocumentBuilderFactory(
             DocumentBuilderFactory.newInstance(), false, false);
     String secretText = getSecretText(factory, exploit);
@@ -32,7 +33,7 @@ final class DocumentBuilderFactorySecurityTest {
   }
 
   private String generateExploit() throws IOException {
-    var exploit =
+    String exploit =
         FileUtils.readFileToString(new File("src/test/resources/xxe.xml"), StandardCharsets.UTF_8);
     exploit =
         exploit.replace("$PATH$", new File("src/test/resources/secret.txt").getAbsolutePath());
@@ -43,7 +44,7 @@ final class DocumentBuilderFactorySecurityTest {
       throws Exception {
     ByteArrayInputStream exploitStream =
         new ByteArrayInputStream(exploit.getBytes(StandardCharsets.UTF_8));
-    var doc = factory.newDocumentBuilder().parse(exploitStream);
+    Document doc = factory.newDocumentBuilder().parse(exploitStream);
     return doc.getDocumentElement().getTextContent();
   }
 }

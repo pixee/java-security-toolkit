@@ -5,7 +5,7 @@
 
     <groupId>io.github.pixee</groupId>
     <artifactId>java-security-toolkit</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 
     <name>java-security-toolkit</name>
     <description>a library with common security controls</description>
@@ -163,8 +163,8 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${versions.maven-compiler-plugin}</version>
                     <configuration>
-                        <source>11</source>
-                        <target>11</target>
+                        <source>8</source>
+                        <target>8</target>
                     </configuration>
                 </plugin>
                 <plugin>
