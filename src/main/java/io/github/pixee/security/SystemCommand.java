@@ -1,5 +1,8 @@
 package io.github.pixee.security;
 
+import static io.github.pixee.security.J8ApiBridge.listOf;
+import static io.github.pixee.security.J8ApiBridge.setOf;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -17,7 +20,7 @@ public final class SystemCommand {
    * @return a set of restrictions suitable for general use
    */
   public static Set<SystemCommandRestrictions> defaultRestrictions() {
-    return Set.of(
+    return setOf(
         SystemCommandRestrictions.PREVENT_COMMAND_CHAINING,
         SystemCommandRestrictions.PREVENT_ARGUMENTS_TARGETING_SENSITIVE_FILES);
   }
@@ -453,10 +456,10 @@ public final class SystemCommand {
     return SHELL_FILE_NAMES.contains(commandFile.getName());
   }
 
-  private static final List<String> SHELL_FILE_NAMES = List.of("bash", "sh", "zsh", "csh", "tcsh");
+  private static final List<String> SHELL_FILE_NAMES = listOf("bash", "sh", "zsh", "csh", "tcsh");
 
   private static final List<String> BANNED_EXECUTABLES =
-      List.of(
+      listOf(
           // reverse shells, exfiltration, downloading malware
           "nc",
           "curl",
@@ -466,7 +469,7 @@ public final class SystemCommand {
           "rpm");
 
   private static final List<String> SENSITIVE_FILE_NAMES =
-      List.of(
+      listOf(
           "/etc/passwd",
           "/etc/shadow",
           "/etc/group",

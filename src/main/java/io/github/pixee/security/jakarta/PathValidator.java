@@ -2,6 +2,8 @@ package io.github.pixee.security.jakarta;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.apache.commons.io.FilenameUtils;
 
@@ -35,7 +37,8 @@ public final class PathValidator {
   }
 
   private static final List<PathNormalizer> pathValidators =
-      List.of(new ApacheFilenameUtilsPathNormalizer(), new UriPathNormalizer());
+      Collections.unmodifiableList(
+          Arrays.asList(new ApacheFilenameUtilsPathNormalizer(), new UriPathNormalizer()));
 
   /**
    * Validates the path argument to javax.servlet.http.HttpServletRequest#getRequestDispatcher(),
@@ -77,5 +80,6 @@ public final class PathValidator {
 
   private static final String unsafePathMessage = "unsafe forward destination specified";
   private static final List<String> unsafeDestinations =
-      List.of("WEB-INF/web.xml", "WEB-INF/classes/", "WEB-INF/lib/");
+      Collections.unmodifiableList(
+          Arrays.asList("WEB-INF/web.xml", "WEB-INF/classes/", "WEB-INF/lib/"));
 }

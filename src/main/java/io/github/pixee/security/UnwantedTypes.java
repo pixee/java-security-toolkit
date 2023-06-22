@@ -1,5 +1,7 @@
 package io.github.pixee.security;
 
+import static io.github.pixee.security.J8ApiBridge.listOf;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -64,7 +66,7 @@ public final class UnwantedTypes {
 
   /** A list of types known to be involved in deserialization and remote code execution attacks. */
   private static final List<String> gadgets =
-      List.of(
+      listOf(
           " org.apache.commons.beanutils.BeanComparator".substring(1),
           " org.apache.commons.collections.functors.ChainedTransformer".substring(1),
           " org.apache.commons.collections.functors.ConstantTransformer".substring(1),
@@ -128,7 +130,7 @@ public final class UnwantedTypes {
    * remote code execution attacks.
    */
   private static final List<String> gadgetPrefixes =
-      List.of(
+      listOf(
           "com.sun.rowset.JdbcRowSetImpl$",
           "java.rmi.registry.Registry$",
           "java.rmi.server.ObjID$",

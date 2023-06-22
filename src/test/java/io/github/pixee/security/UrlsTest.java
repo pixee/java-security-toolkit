@@ -1,12 +1,12 @@
 package io.github.pixee.security;
 
+import static io.github.pixee.security.J8ApiBridge.setOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
@@ -20,9 +20,7 @@ final class UrlsTest {
   void it_allows_good_protocols() throws MalformedURLException {
     URL url =
         Urls.create(
-            "https://foo:bar@zxc.com/endpt?foo",
-            Set.of(UrlProtocol.HTTPS),
-            HostValidator.ALLOW_ALL);
+            "https://foo:bar@zxc.com/endpt?foo", setOf(UrlProtocol.HTTPS), HostValidator.ALLOW_ALL);
     assertThat(url, is(not(nullValue())));
     assertThat(url.getHost(), equalTo("zxc.com"));
     assertThat(url.getProtocol(), equalTo("https"));
@@ -55,7 +53,7 @@ final class UrlsTest {
                         "example.org",
                         21,
                         "foo.zip",
-                        Set.of(UrlProtocol.FTP),
+                        setOf(UrlProtocol.FTP),
                         HostValidator.ALLOW_ALL)),
         Arguments.of(
             (UrlFactory)
@@ -66,7 +64,7 @@ final class UrlsTest {
                         21,
                         "foo.zip",
                         null,
-                        Set.of(UrlProtocol.FTP),
+                        setOf(UrlProtocol.FTP),
                         HostValidator.ALLOW_ALL)),
         Arguments.of(
             (UrlFactory)
@@ -74,7 +72,7 @@ final class UrlsTest {
                     Urls.create(
                         new URL("ftp://example.org:21/"),
                         "foo.zip",
-                        Set.of(UrlProtocol.FTP),
+                        setOf(UrlProtocol.FTP),
                         HostValidator.ALLOW_ALL)),
         Arguments.of(
             (UrlFactory)
@@ -83,7 +81,7 @@ final class UrlsTest {
                         new URL("ftp://example.org:21/"),
                         "foo.zip",
                         null,
-                        Set.of(UrlProtocol.FTP),
+                        setOf(UrlProtocol.FTP),
                         HostValidator.ALLOW_ALL)));
   }
 
@@ -101,7 +99,7 @@ final class UrlsTest {
   void it_creates_without_port_specified() throws MalformedURLException {
     URL url =
         Urls.create(
-            "ftp", "example.org", "foo.zip", Set.of(UrlProtocol.FTP), HostValidator.ALLOW_ALL);
+            "ftp", "example.org", "foo.zip", setOf(UrlProtocol.FTP), HostValidator.ALLOW_ALL);
     assertThat(url.getProtocol(), equalTo("ftp"));
     assertThat(url.getHost(), equalTo("example.org"));
     assertThat(url.getPort(), equalTo(-1));
@@ -110,15 +108,15 @@ final class UrlsTest {
 
   @Test
   void it_allows_any_host_when_none_specified() throws MalformedURLException {
-    Urls.create("https://foo:bar@zxc.com/endpt?foo", Set.of(), HostValidator.ALLOW_ALL);
+    Urls.create("https://foo:bar@zxc.com/endpt?foo", setOf(), HostValidator.ALLOW_ALL);
   }
 
   @Test
   void it_allows_any_protocol_when_none_specified() throws MalformedURLException {
-    Urls.create("https://foo:bar@zxc.com/endpt?foo", Set.of(), HostValidator.ALLOW_ALL);
+    Urls.create("https://foo:bar@zxc.com/endpt?foo", setOf(), HostValidator.ALLOW_ALL);
     Urls.create("https://foo:bar@zxc.com/endpt?foo", null, HostValidator.ALLOW_ALL);
     Urls.create(
-        "https://foo:bar@zxc.com/endpt?foo", Set.of(UrlProtocol.ANY), HostValidator.ALLOW_ALL);
+        "https://foo:bar@zxc.com/endpt?foo", setOf(UrlProtocol.ANY), HostValidator.ALLOW_ALL);
   }
 
   @Test
@@ -126,7 +124,7 @@ final class UrlsTest {
     assertThrows(
         SecurityException.class,
         () -> {
-          Urls.create("http://etc/passwd", Set.of(UrlProtocol.FTP), HostValidator.ALLOW_ALL);
+          Urls.create("http://etc/passwd", setOf(UrlProtocol.FTP), HostValidator.ALLOW_ALL);
         });
   }
 
@@ -134,11 +132,11 @@ final class UrlsTest {
   void it_disallows_bad_domains() throws MalformedURLException {
     HostValidator allowsOnlyGoodDotCom =
         HostValidator.fromAllowedHostPattern(Pattern.compile("good\\.com"));
-    Urls.create("https://good.com/", Set.of(UrlProtocol.HTTPS), allowsOnlyGoodDotCom);
+    Urls.create("https://good.com/", setOf(UrlProtocol.HTTPS), allowsOnlyGoodDotCom);
     assertThrows(
         SecurityException.class,
         () -> {
-          Urls.create("https://evil.com/", Set.of(UrlProtocol.HTTPS), allowsOnlyGoodDotCom);
+          Urls.create("https://evil.com/", setOf(UrlProtocol.HTTPS), allowsOnlyGoodDotCom);
         });
   }
 
@@ -146,7 +144,7 @@ final class UrlsTest {
   void it_blocks_know_bad_hosts_when_asked() throws MalformedURLException {
     // all hosts are allowed so this should work
     String awsMetadataUrl = "http://169.254.169.254/latest/meta-data";
-    Urls.create(awsMetadataUrl, Set.of(UrlProtocol.ANY), HostValidator.ALLOW_ALL);
+    Urls.create(awsMetadataUrl, setOf(UrlProtocol.ANY), HostValidator.ALLOW_ALL);
 
     // now we try with the "block the few known bad places"
     assertThrows(
@@ -154,7 +152,7 @@ final class UrlsTest {
         () -> {
           Urls.create(
               awsMetadataUrl,
-              Set.of(UrlProtocol.ANY),
+              setOf(UrlProtocol.ANY),
               HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         });
   }

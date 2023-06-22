@@ -1,5 +1,7 @@
 package io.github.pixee.security;
 
+import static io.github.pixee.security.J8ApiBridge.setOf;
+
 import java.util.Set;
 import javax.xml.stream.XMLInputFactory;
 
@@ -19,7 +21,7 @@ public final class XMLInputFactorySecurity {
 
   /** Harden the {@link XMLInputFactory} against external entity attacks */
   public static XMLInputFactory hardenFactory(final XMLInputFactory factory) {
-    return hardenFactory(factory, Set.of(XMLRestrictions.DISALLOW_EXTERNAL_ENTITIES));
+    return hardenFactory(factory, setOf(XMLRestrictions.DISALLOW_EXTERNAL_ENTITIES));
   }
 
   /** Harden the {@link XMLInputFactory} against XML-based attacks with the given restrictions. */

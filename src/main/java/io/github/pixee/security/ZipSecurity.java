@@ -54,7 +54,7 @@ public final class ZipSecurity {
       final ZipEntry entry = super.getNextEntry();
       final String name = entry.getName();
 
-      if (!name.isBlank()) {
+      if (!"".equals(name.trim())) {
         if (isRootFileEntry(name)) {
           throw new SecurityException("encountered zip file path that is absolute: " + name);
         }

@@ -1,5 +1,6 @@
 package io.github.pixee.security;
 
+import static io.github.pixee.security.J8ApiBridge.setOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -7,7 +8,6 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -22,7 +22,7 @@ final class ReflectionTest {
         SecurityException.class,
         () ->
             Reflection.loadAndVerify(
-                type, Set.of(ReflectionRestrictions.MUST_NOT_INVOLVE_CODE_EXECUTION)));
+                type, setOf(ReflectionRestrictions.MUST_NOT_INVOLVE_CODE_EXECUTION)));
 
     // run the same test and confirm that the defaultRestrictions() returns this
     assertThrows(SecurityException.class, () -> Reflection.loadAndVerify(type));
@@ -36,11 +36,11 @@ final class ReflectionTest {
         SecurityException.class,
         () ->
             Reflection.loadAndVerify(
-                ReflectionTest.class.getName(), Set.of(ReflectionRestrictions.MUST_BE_PUBLIC)));
+                ReflectionTest.class.getName(), setOf(ReflectionRestrictions.MUST_BE_PUBLIC)));
 
     // the type we're testing is public and so we should be able to load it
     Reflection.loadAndVerify(
-        Reflection.class.getName(), Set.of(ReflectionRestrictions.MUST_BE_PUBLIC));
+        Reflection.class.getName(), setOf(ReflectionRestrictions.MUST_BE_PUBLIC));
   }
 
   @ParameterizedTest

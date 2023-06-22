@@ -1,5 +1,7 @@
 package io.github.pixee.security;
 
+import static io.github.pixee.security.J8ApiBridge.setOf;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLStreamHandler;
@@ -17,7 +19,7 @@ public final class Urls {
    * This is a convenience {@link Set} provided for most people who probably only want to allow
    * HTTP-based protocols.
    */
-  public static Set<UrlProtocol> HTTP_PROTOCOLS = Set.of(UrlProtocol.HTTPS, UrlProtocol.HTTP);
+  public static Set<UrlProtocol> HTTP_PROTOCOLS = setOf(UrlProtocol.HTTPS, UrlProtocol.HTTP);
 
   public static URL create(
       final String url, final Set<UrlProtocol> allowedProtocols, final HostValidator validator)

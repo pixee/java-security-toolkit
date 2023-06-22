@@ -1,5 +1,7 @@
 package io.github.pixee.security;
 
+import static io.github.pixee.security.J8ApiBridge.setOf;
+
 import java.lang.reflect.Modifier;
 import java.util.Set;
 
@@ -12,7 +14,7 @@ public final class Reflection {
   private Reflection() {}
 
   private static final Set<ReflectionRestrictions> defaultRestrictions =
-      Set.of(ReflectionRestrictions.MUST_NOT_INVOLVE_CODE_EXECUTION);
+      setOf(ReflectionRestrictions.MUST_NOT_INVOLVE_CODE_EXECUTION);
 
   /**
    * Provide the default restrictions for loading a type that will work for the vast majority of
@@ -99,14 +101,14 @@ public final class Reflection {
   }
 
   private static final Set<Class<?>> codeLoadingTypes =
-      Set.of(
+      setOf(
           java.lang.Runtime.class,
           java.lang.ProcessBuilder.class,
           java.lang.Class.class,
           java.lang.ClassLoader.class);
 
   private static final Set<String> codeLoadingPackages =
-      Set.of(
+      setOf(
           "java.lang.invoke.",
           "org.apache.commons.collections.functors.",
           "bsh.",

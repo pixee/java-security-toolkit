@@ -42,7 +42,7 @@ public final class Filenames {
    *     File Upload</a>
    */
   public static String toSimpleFileName(final String fileName) {
-    if (fileName == null || fileName.isBlank()) {
+    if (fileName == null || "".equals(fileName.trim())) {
       // this file name may cause issues with the apis they'll be used in but we can't help so don't
       // try
       return fileName;

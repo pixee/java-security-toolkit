@@ -1,5 +1,6 @@
 package io.github.pixee.security;
 
+import static io.github.pixee.security.J8ApiBridge.setOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -8,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Set;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -39,7 +39,7 @@ final class XMLInputFactorySecurityTest {
   void it_fails_when_invalid_restrictions() {
     assertThrows(
         IllegalArgumentException.class,
-        () -> XMLInputFactorySecurity.hardenFactory(XMLInputFactory.newFactory(), Set.of()));
+        () -> XMLInputFactorySecurity.hardenFactory(XMLInputFactory.newFactory(), setOf()));
   }
 
   @Test
@@ -47,7 +47,7 @@ final class XMLInputFactorySecurityTest {
     String exploit = generateExploit();
     XMLInputFactory factory =
         XMLInputFactorySecurity.hardenFactory(
-            XMLInputFactory.newFactory(), Set.of(XMLRestrictions.DISALLOW_DOCTYPE));
+            XMLInputFactory.newFactory(), setOf(XMLRestrictions.DISALLOW_DOCTYPE));
     assertThrows(XMLStreamException.class, () -> getSecretText(factory, exploit));
   }
 
@@ -57,7 +57,7 @@ final class XMLInputFactorySecurityTest {
     String exploit = generateExploit();
     XMLInputFactory factory =
         XMLInputFactorySecurity.hardenFactory(
-            XMLInputFactory.newFactory(), Set.of(XMLRestrictions.DISALLOW_EXTERNAL_ENTITIES));
+            XMLInputFactory.newFactory(), setOf(XMLRestrictions.DISALLOW_EXTERNAL_ENTITIES));
     String secretText = getSecretText(factory, exploit);
     assertThat("", equalTo(secretText)); // string is empty instead of secret!
   }

@@ -1,5 +1,7 @@
 package io.github.pixee.security;
 
+import static io.github.pixee.security.J8ApiBridge.listOf;
+
 import java.util.List;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -47,7 +49,7 @@ public final class DocumentBuilderFactorySecurity {
   }
 
   private static final List<String> externalEntityFeatures =
-      List.of(
+      listOf(
           "http://apache.org/xml/features/disallow-doctype-decl",
           "http://apache.org/xml/features/disallow-doctype-decl",
           "http://apache.org/xml/features/nonvalidating/load-external-dtd",

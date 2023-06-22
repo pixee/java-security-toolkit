@@ -1,5 +1,7 @@
 package io.github.pixee.security;
 
+import static io.github.pixee.security.J8ApiBridge.setOf;
+
 import java.net.URL;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -33,7 +35,7 @@ public interface HostValidator {
         }
 
         private final Set<String> knownInfrastructureTargets =
-            Set.of("192.168.1.1", "3232235777", "169.254.169.254", "2852039166");
+            setOf("192.168.1.1", "3232235777", "169.254.169.254", "2852039166");
       };
 
   /**

@@ -1,5 +1,7 @@
 package io.github.pixee.security;
 
+import static io.github.pixee.security.J8ApiBridge.listOf;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -31,7 +33,7 @@ public final class XMLDecoderSecurity {
    */
   public static InputStream hardenStream(final InputStream is) {
     return tokenDetectingInputStream(
-        is, List.of("java.lang.Runtime", "java.lang.ProcessBuilder", "java.io.FileOutputStream"));
+        is, listOf("java.lang.Runtime", "java.lang.ProcessBuilder", "java.io.FileOutputStream"));
   }
 
   /**
@@ -43,7 +45,7 @@ public final class XMLDecoderSecurity {
     final List<byte[]> byteStreamsToWatch =
         wordsToWatch.stream()
             .map(word -> word.getBytes(StandardCharsets.UTF_8))
-            .collect(Collectors.toUnmodifiableList());
+            .collect(Collectors.toList());
     return new TokenDetectingInputStream(is, byteStreamsToWatch);
   }
 
