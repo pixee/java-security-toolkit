@@ -5,7 +5,7 @@
 
     <groupId>io.github.pixee</groupId>
     <artifactId>java-security-toolkit</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
 
     <name>java-security-toolkit</name>
     <description>a library with common security controls</description>
@@ -83,12 +83,6 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.11.0</version>
-        </dependency>
-        <!-- needed for the ring buffer to efficiently detect tokens in InputStream in SafeIO -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-collections4</artifactId>
-            <version>4.4</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.mojo</groupId>
