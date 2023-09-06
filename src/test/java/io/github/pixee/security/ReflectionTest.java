@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+/** Test the protections of {@link Reflection}. */
 final class ReflectionTest {
 
   @ParameterizedTest
@@ -26,6 +27,11 @@ final class ReflectionTest {
 
     // run the same test and confirm that the defaultRestrictions() returns this
     assertThrows(SecurityException.class, () -> Reflection.loadAndVerify(type));
+
+    // run the same test again on the other signature
+    assertThrows(
+        SecurityException.class,
+        () -> Reflection.loadAndVerify(type, true, getClass().getClassLoader()));
   }
 
   @Test
@@ -38,7 +44,10 @@ final class ReflectionTest {
             Reflection.loadAndVerify(
                 ReflectionTest.class.getName(), setOf(ReflectionRestrictions.MUST_BE_PUBLIC)));
 
-    // the type we're testing is public and so we should be able to load it
+    // the type we're testing is public, and so we should be able to load it
+    Reflection.loadAndVerify(
+        Reflection.class.getName(), setOf(ReflectionRestrictions.MUST_BE_PUBLIC));
+
     Reflection.loadAndVerify(
         Reflection.class.getName(), setOf(ReflectionRestrictions.MUST_BE_PUBLIC));
   }
@@ -52,6 +61,8 @@ final class ReflectionTest {
       })
   void it_loads_normal_classes(final String typeName) throws ClassNotFoundException {
     Class<?> type = Reflection.loadAndVerify(typeName);
+    assertThat(type, is(not(nullValue())));
+    type = Reflection.loadAndVerify(typeName, true, getClass().getClassLoader());
     assertThat(type, is(not(nullValue())));
   }
 

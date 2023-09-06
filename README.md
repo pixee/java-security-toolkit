@@ -35,15 +35,15 @@ In Maven:
 <dependency>
   <groupId>io.github.pixee</groupId>
   <artifactId>java-security-toolkit</artifactId>
-  <version>1.0.6</version>
+  <version>1.0.7</version>
 </dependency>
 ```
 In Gradle:
 ```kotlin
-implementation("io.github.pixee:java-security-toolkit:1.0.6")
+implementation("io.github.pixee:java-security-toolkit:1.0.7")
 ```
 
-## Contributing
+## Contributing 
 We'd love to get contributions! See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### Building
