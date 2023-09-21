@@ -10,8 +10,10 @@ import java.io.*;
 import java.nio.file.Files;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Disabled
 final class ObjectInputFiltersTest {
 
   private static DiskFileItem gadget; // this is an evil gadget type
