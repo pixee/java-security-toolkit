@@ -58,7 +58,7 @@
         <versions.maven-gpg-plugin>3.0.1</versions.maven-gpg-plugin>
         <versions.jacoco-maven-plugin>0.8.7</versions.jacoco-maven-plugin>
 
-        <versions.maven-javadoc-plugin>2.9.1</versions.maven-javadoc-plugin>
+        <versions.maven-javadoc-plugin>3.6.0</versions.maven-javadoc-plugin>
         <versions.nexus-staging-maven-plugin>1.6.13</versions.nexus-staging-maven-plugin>
     </properties>
 
@@ -83,6 +83,12 @@
             <artifactId>commons-fileupload</artifactId>
             <version>1.5</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
