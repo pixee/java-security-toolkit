@@ -5,7 +5,7 @@
 
     <groupId>io.github.pixee</groupId>
     <artifactId>java-security-toolkit</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
 
     <name>java-security-toolkit</name>
     <description>a library with common security controls</description>
@@ -63,12 +63,11 @@
     </properties>
 
     <dependencies>
-
-        <!-- needed for XSS escapers -->
+        <!-- needed for ValidatingObjectInputStream in deserialization -->
         <dependency>
-            <groupId>com.coverity.security</groupId>
-            <artifactId>coverity-escapers</artifactId>
-            <version>1.1.1</version>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.13.0</version>
         </dependency>
 
         <!-- needed for command line parsers -->
@@ -78,18 +77,6 @@
             <version>2.1</version>
         </dependency>
 
-        <!-- needed for ValidatingObjectInputStream in deserialization -->
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.11.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>animal-sniffer-annotations</artifactId>
-            <version>1.23</version>
-            <optional>true</optional>
-        </dependency>
         <!-- needed for testing deserialization protection -->
         <dependency>
             <groupId>commons-fileupload</groupId>
@@ -162,30 +149,9 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${versions.maven-compiler-plugin}</version>
                     <configuration>
-                        <source>8</source>
-                        <target>8</target>
+                        <source>11</source>
+                        <target>11</target>
                     </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>animal-sniffer-maven-plugin</artifactId>
-                    <version>1.23</version>
-                    <configuration>
-                        <signature>
-                            <groupId>org.codehaus.mojo.signature</groupId>
-                            <artifactId>java18</artifactId>
-                            <version>1.0</version>
-                        </signature>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>animal-sniffer</id>
-                            <phase>test</phase>
-                            <goals>
-                                <goal>check</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.jacoco</groupId>
@@ -275,10 +241,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>animal-sniffer-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
