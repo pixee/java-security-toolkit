@@ -1,6 +1,14 @@
 plugins {
     `java-library`
     `maven-publish`
+    signing
+    id("com.netflix.nebula.contacts") version "7.0.1"
+    id("com.netflix.nebula.source-jar") version "20.3.0"
+    id("com.netflix.nebula.javadoc-jar") version "20.3.0"
+    id("com.netflix.nebula.maven-publish") version "20.3.0"
+    id("com.netflix.nebula.publish-verification") version "20.3.0"
+    id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
+
 }
 
 repositories {
@@ -32,9 +40,59 @@ java {
     }
 }
 
+tasks.compileJava {
+    options.release.set(11)
+}
+
+extensions.getByType<nebula.plugin.contacts.ContactsExtension>().run {
+    addPerson(
+        "support@pixee.ai",
+        delegateClosureOf<nebula.plugin.contacts.Contact> {
+            moniker("Pixee")
+            github("pixee")
+        },
+    )
+}
+
+val publicationName = "nebula"
+signing {
+    if (providers.environmentVariable("CI").isPresent) {
+        val signingKey: String? by project
+        val signingPassword: String? by project
+        useInMemoryPgpKeys(signingKey, signingPassword)
+    }
+    sign(extensions.getByType<PublishingExtension>().publications.getByName(publicationName))
+}
+
 publishing {
-    publications.create<MavenPublication>("maven") {
-        from(components["java"])
+    repositories {
+        maven {
+            name = "pixeeArtifactory"
+            url = uri("https://pixee.jfrog.io/artifactory/default-maven-virtual")
+            credentials(PasswordCredentials::class)
+        }
+    }
+
+    publications {
+        named<MavenPublication>(publicationName) {
+            pom {
+                licenses {
+                    license {
+                        name.set("MIT License")
+                        url.set("http://www.opensource.org/licenses/mit-license.php")
+                    }
+                }
+                val scmHost = "github.com"
+                val scmProject = "pixee/java-security-toolkit"
+                val projectUrl = "https://$scmHost/$scmProject"
+                url.set(projectUrl)
+                scm {
+                    url.set(projectUrl)
+                    connection.set("scm:git:git@$scmHost:$scmProject")
+                    developerConnection.set(connection)
+                }
+            }
+        }
     }
 }
 
