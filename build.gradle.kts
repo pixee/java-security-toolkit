@@ -146,6 +146,29 @@ tasks.test {
         // Avoid modules in tests so we can test against Java/JDK 8.
         setRunOnClasspath(true)
     }
+
+    javaLauncher.set(javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    })
+}
+
+val java11Test = tasks.register<Test>("testOn11") {
+    useJUnitPlatform()
+    javaLauncher.set(javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    })
+}
+
+val java17Test = tasks.register<Test>("testOn17") {
+    useJUnitPlatform()
+    javaLauncher.set(javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    })
+}
+
+
+tasks.check {
+    dependsOn(java11Test, java17Test)
 }
 
 tasks.compileTestJava {
@@ -153,4 +176,5 @@ tasks.compileTestJava {
         // Avoid modules in tests so we can test against Java/JDK 8.
         setCompileOnClasspath(true)
     }
+    options.release.set(8)
 }
