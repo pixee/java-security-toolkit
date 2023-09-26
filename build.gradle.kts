@@ -8,17 +8,34 @@ plugins {
     id("com.netflix.nebula.maven-publish") version "20.3.0"
     id("com.netflix.nebula.publish-verification") version "20.3.0"
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
-
 }
 
 repositories {
    mavenCentral()
 }
 
+val java11SourceSet = sourceSets.create("java11") {
+    java.srcDir("src/java11/main")
+    compileClasspath += sourceSets.main.get().output
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+
+    registerFeature("java11") {
+        usingSourceSet(java11SourceSet)
+    }
+}
+
 dependencies {
     api("com.coverity.security:coverity-escapers:1.1.1")
     api("com.martiansoftware:jsap:2.1")
     api("commons-io:commons-io:2.11.0")
+    "java11Api"("commons-io:commons-io:2.11.0")
     api("org.codehaus.mojo:animal-sniffer-annotations:1.23")
     testImplementation("commons-fileupload:commons-fileupload:1.5")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
@@ -31,14 +48,6 @@ dependencies {
 group = "io.github.pixee"
 version = "1.0.7"
 description = "java-security-toolkit"
-
-java {
-    withSourcesJar()
-    withJavadocJar()
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
-    }
-}
 
 tasks.compileJava {
     options.release.set(11)

@@ -6,7 +6,6 @@ import java.io.ObjectInputFilter;
 import java.io.ObjectInputStream;
 import java.util.Objects;
 import org.apache.commons.io.serialization.ValidatingObjectInputStream;
-import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
 
 /**
  * This type exposes helper methods that will help defend against Java deserialization attacks.
@@ -15,7 +14,6 @@ import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
  * href="https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html">OWASP
  * Cheat Sheet</a>.
  */
-@IgnoreJRERequirement
 public final class ObjectInputFilters {
 
   private ObjectInputFilters() {}
@@ -80,7 +78,6 @@ public final class ObjectInputFilters {
     return new CombinedObjectInputFilter(existingFilter);
   }
 
-  @IgnoreJRERequirement
   private static class CombinedObjectInputFilter implements ObjectInputFilter {
     private final ObjectInputFilter originalFilter;
 
