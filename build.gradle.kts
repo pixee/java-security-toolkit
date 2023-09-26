@@ -4,6 +4,7 @@ plugins {
     `java-library`
     `maven-publish`
     signing
+    jacoco
     id("com.netflix.nebula.contacts") version "7.0.1"
     id("com.netflix.nebula.source-jar") version "20.3.0"
     id("com.netflix.nebula.javadoc-jar") version "20.3.0"
@@ -146,8 +147,13 @@ publishing {
     }
 }
 
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+}
+
 tasks.test {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
     extensions.configure(org.javamodularity.moduleplugin.extensions.TestModuleOptions::class) {
         // Avoid modules in tests so we can test against Java/JDK 8.
         setRunOnClasspath(true)
