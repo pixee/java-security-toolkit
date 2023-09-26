@@ -173,6 +173,7 @@ testing {
         register<JvmTestSuite>("java11Test") {
             useJUnitJupiter()
             dependencies {
+                runtimeOnly(project())
                 implementation(project()) {
                     capabilities {
                         requireCapabilities("io.github.pixee:java11-support")
