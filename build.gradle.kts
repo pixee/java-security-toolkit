@@ -113,15 +113,16 @@ signing {
     sign(extensions.getByType<PublishingExtension>().publications.getByName(publicationName))
 }
 
-publishing {
+nexusPublishing {
     repositories {
-        maven {
-            name = "pixeeArtifactory"
-            url = uri("https://pixee.jfrog.io/artifactory/default-maven-virtual")
-            credentials(PasswordCredentials::class)
+        sonatype {
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
         }
     }
+}
 
+publishing {
     publications {
         named<MavenPublication>(publicationName) {
             pom {
