@@ -57,7 +57,6 @@ java {
 }
 
 dependencies {
-    api("com.coverity.security:coverity-escapers:1.1.1")
     api("com.martiansoftware:jsap:2.1")
     api("commons-io:commons-io:2.11.0")
     java11SourceSet.apiConfigurationName("commons-io:commons-io:2.11.0")
