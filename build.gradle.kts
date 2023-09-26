@@ -1,3 +1,5 @@
+import org.javamodularity.moduleplugin.extensions.ModularityExtension
+
 plugins {
     `java-library`
     `maven-publish`
@@ -8,6 +10,28 @@ plugins {
     id("com.netflix.nebula.maven-publish") version "20.3.0"
     id("com.netflix.nebula.publish-verification") version "20.3.0"
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
+    id("org.javamodularity.moduleplugin") version "1.8.12"
+}
+
+tasks.named<Jar>("javadocJar") {
+    exclude("module-info.class")
+}
+
+tasks.named<Jar>("sourcesJar") {
+    dependsOn("compileModuleInfoJava")
+    exclude("module-info.class")
+}
+
+tasks.named<JavaCompile>("compileJava") {
+    options.release.set(null as Int?)
+}
+
+configure<ModularityExtension> {
+    mixedJavaRelease(8)
+}
+
+tasks.named<JavaCompile>("compileModuleInfoJava") {
+    options.release.set(null as Int?)
 }
 
 repositories {
@@ -35,8 +59,7 @@ dependencies {
     api("com.coverity.security:coverity-escapers:1.1.1")
     api("com.martiansoftware:jsap:2.1")
     api("commons-io:commons-io:2.11.0")
-    "java11Api"("commons-io:commons-io:2.11.0")
-    api("org.codehaus.mojo:animal-sniffer-annotations:1.23")
+    java11SourceSet.apiConfigurationName("commons-io:commons-io:2.11.0")
     testImplementation("commons-fileupload:commons-fileupload:1.5")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
@@ -45,13 +68,25 @@ dependencies {
     testImplementation("org.mockito:mockito-core:4.0.0")
 }
 
+tasks.named<JavaCompile>(java11SourceSet.compileJavaTaskName) {
+    options.release.set(9)
+}
+
+tasks.named<Jar>("jar") {
+    into("META-INF/versions/11") {
+        from(java11SourceSet.output)
+    }
+    manifest.attributes(
+        Pair("Multi-Release", "true")
+    )
+
+    inputs.files(tasks.named(java11SourceSet.compileJavaTaskName).map { it.outputs.files })
+}
+
 group = "io.github.pixee"
 version = "1.0.7"
 description = "java-security-toolkit"
 
-tasks.compileJava {
-    options.release.set(11)
-}
 
 extensions.getByType<nebula.plugin.contacts.ContactsExtension>().run {
     addPerson(
@@ -107,4 +142,15 @@ publishing {
 
 tasks.test {
     useJUnitPlatform()
+    extensions.configure(org.javamodularity.moduleplugin.extensions.TestModuleOptions::class) {
+        // Avoid modules in tests so we can test against Java/JDK 8.
+        setRunOnClasspath(true)
+    }
+}
+
+tasks.compileTestJava {
+    extensions.configure(org.javamodularity.moduleplugin.extensions.CompileTestModuleOptions::class) {
+        // Avoid modules in tests so we can test against Java/JDK 8.
+        setCompileOnClasspath(true)
+    }
 }
