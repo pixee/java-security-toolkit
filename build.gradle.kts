@@ -180,10 +180,14 @@ testing {
                 }
                 implementation("org.hamcrest:hamcrest-all:1.3")
                 implementation("org.mockito:mockito-core:4.0.0")
-                implementation("commons-fileupload:commons-fileupload:1.5")
+                implementation("commons-fileupload:commons-fileupload:1.3.3")
             }
         }
     }
+}
+
+tasks.named<Test>("java11Test") {
+    systemProperty("org.apache.commons.fileupload.disk.DiskFileItem.serializable", "true")
 }
 
 val java11Test = tasks.register<Test>("testOn11") {
