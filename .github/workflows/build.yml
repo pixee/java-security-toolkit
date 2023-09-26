@@ -23,11 +23,12 @@ jobs:
       - name: Execute Gradle build
         run: ./gradlew build
 
-#      - name: "Generate Coverage Badge"
-#        id: jacoco
-#        uses: cicirello/jacoco-badge-generator@v2
-#        with:
-#          generate-branches-badge: true
+      - name: "Generate Coverage Badge"
+        id: jacoco
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          generate-branches-badge: true
+          jacoco-csv-file: build/reports/jacoco/test/jacocoTestReport.csv
 #
 #      - name: "Log coverage percentage"
 #        run: |

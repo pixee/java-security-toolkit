@@ -149,6 +149,9 @@ publishing {
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
+    reports {
+        csv.required.set(true)
+    }
 }
 
 tasks.test {
