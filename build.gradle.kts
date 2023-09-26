@@ -184,6 +184,13 @@ testing {
                 implementation("commons-fileupload:commons-fileupload:1.3.3")
             }
         }
+
+        register<JvmTestSuite>("integrationTest") {
+            useJUnitJupiter()
+            dependencies {
+
+            }
+        }
     }
 }
 
@@ -208,7 +215,7 @@ val java17Test = tasks.register<Test>("testOn17") {
 
 tasks.check {
     @Suppress("UnstableApiUsage")
-    dependsOn(java11Test, java17Test, testing.suites.named("java11Test"))
+    dependsOn(java11Test, java17Test, testing.suites.named("java11Test"), testing.suites.named("integrationTest"))
 }
 
 tasks.compileTestJava {
