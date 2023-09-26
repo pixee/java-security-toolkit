@@ -5,6 +5,7 @@ plugins {
     `maven-publish`
     signing
     jacoco
+    `jvm-test-suite`
     id("com.netflix.nebula.contacts") version "7.0.1"
     id("com.netflix.nebula.source-jar") version "20.3.0"
     id("com.netflix.nebula.javadoc-jar") version "20.3.0"
@@ -52,6 +53,7 @@ java {
     }
 
     registerFeature("java11") {
+        capability("io.github.pixee", "java11-support", version.toString())
         usingSourceSet(java11SourceSet)
     }
 }
@@ -60,7 +62,6 @@ dependencies {
     api("com.martiansoftware:jsap:2.1")
     api("commons-io:commons-io:2.11.0")
     java11SourceSet.apiConfigurationName("commons-io:commons-io:2.11.0")
-    testImplementation("commons-fileupload:commons-fileupload:1.5")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -166,6 +167,25 @@ tasks.test {
     })
 }
 
+testing {
+    suites {
+        @Suppress("UnstableApiUsage")
+        register<JvmTestSuite>("java11Test") {
+            useJUnitJupiter()
+            dependencies {
+                implementation(project()) {
+                    capabilities {
+                        requireCapabilities("io.github.pixee:java11-support")
+                    }
+                }
+                implementation("org.hamcrest:hamcrest-all:1.3")
+                implementation("org.mockito:mockito-core:4.0.0")
+                implementation("commons-fileupload:commons-fileupload:1.5")
+            }
+        }
+    }
+}
+
 val java11Test = tasks.register<Test>("testOn11") {
     useJUnitPlatform()
     javaLauncher.set(javaToolchains.launcherFor {
@@ -182,7 +202,8 @@ val java17Test = tasks.register<Test>("testOn17") {
 
 
 tasks.check {
-    dependsOn(java11Test, java17Test)
+    @Suppress("UnstableApiUsage")
+    dependsOn(java11Test, java17Test, testing.suites.named("java11Test"))
 }
 
 tasks.compileTestJava {
