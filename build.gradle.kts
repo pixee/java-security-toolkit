@@ -72,7 +72,7 @@ tasks.named<JavaCompile>(java11SourceSet.compileJavaTaskName) {
     options.release.set(9)
 }
 
-tasks.named<Jar>("jar") {
+tasks.jar {
     into("META-INF/versions/11") {
         from(java11SourceSet.output)
     }
@@ -81,6 +81,11 @@ tasks.named<Jar>("jar") {
     )
 
     inputs.files(tasks.named(java11SourceSet.compileJavaTaskName).map { it.outputs.files })
+}
+
+tasks.named(java11SourceSet.jarTaskName) {
+    // disabled because we don't want to publish this separately
+    enabled = false
 }
 
 group = "io.github.pixee"
