@@ -6,6 +6,7 @@ plugins {
 
 val isCI = providers.environmentVariable("CI").isPresent
 
+include("test-apps:hello-world")
 gradleEnterprise {
     buildScan {
         termsOfServiceUrl = "https://gradle.com/terms-of-service"
