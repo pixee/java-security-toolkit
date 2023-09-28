@@ -14,7 +14,7 @@ java {
 }
 
 jib.to.image = "pixee/${project.name}"
-application.mainClass.set("ai.pixee.codemods.App")
+application.mainClass.set("io.github.pixee.testapp.Main")
 
 dependencies {
   compileOnly(project.rootProject)
