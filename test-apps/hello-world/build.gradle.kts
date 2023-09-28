@@ -1,5 +1,5 @@
 plugins {
-    application
+    java
     id("com.google.cloud.tools.jib") version "3.4.0"
 }
 
@@ -14,7 +14,6 @@ java {
 }
 
 jib.to.image = "pixee/${project.name}"
-application.mainClass.set("io.github.pixee.testapp.Main")
 
 dependencies {
   compileOnly(project.rootProject)
