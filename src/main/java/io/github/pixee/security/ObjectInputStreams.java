@@ -14,12 +14,12 @@ import java.io.ObjectInputStream;
  * href="https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html">OWASP
  * Cheat Sheet</a>.
  */
-public final class SafeObjectInputStream {
+public final class ObjectInputStreams {
 
     /**
      * Private no-op constructor to prevent accidental initialization of this class
      */
-    private SafeObjectInputStream() {}
+    private ObjectInputStreams() {}
 
     /**
      * This method returns a wrapped {@link ObjectInputStream} that protects against deserialization
@@ -29,19 +29,12 @@ public final class SafeObjectInputStream {
      * @return an {@link ObjectInputStream} which is safe against all publicly known gadgets
      * @throws IOException if the underlying creation of {@link ObjectInputStream} fails
      */
-    public static ObjectInputStream createSafeObjectInputStream(final InputStream ois)
+    public static ObjectInputStream createValidatingObjectInputStream(final InputStream ois)
             throws IOException {
-        try {
-            final ValidatingObjectInputStream is = new ValidatingObjectInputStream(ois);
-            for (String gadget : UnwantedTypes.dangerousClassNameTokens()) {
-                is.reject("*" + gadget + "*");
-            }
-            return is;
-        } catch (IOException e) {
-            // ignored
+        final ValidatingObjectInputStream is = new ValidatingObjectInputStream(ois);
+        for (String gadget : UnwantedTypes.dangerousClassNameTokens()) {
+            is.reject("*" + gadget + "*");
         }
-
-        // if for some reason we can't replace it, we'll pass it back as it was given
-        return new ObjectInputStream(ois);
+        return is;
     }
 }

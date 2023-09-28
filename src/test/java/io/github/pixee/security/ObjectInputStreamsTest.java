@@ -15,7 +15,7 @@ import java.nio.file.Files;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
-final class SafeObjectInputStreamTest {
+final class ObjectInputStreamsTest {
 
     private static DiskFileItem gadget; // this is an evil gadget type
     private static byte[] serializedGadget; // this the serialized bytes of that gadget
@@ -41,7 +41,7 @@ final class SafeObjectInputStreamTest {
     @Test
     void validating_ois_works() throws Exception {
         ObjectInputStream ois =
-                SafeObjectInputStream.createSafeObjectInputStream(new ByteArrayInputStream(serializedGadget));
+                ObjectInputStreams.createValidatingObjectInputStream(new ByteArrayInputStream(serializedGadget));
         assertThrows(
                 InvalidClassException.class,
                 () -> {
