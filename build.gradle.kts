@@ -188,7 +188,9 @@ testing {
         register<JvmTestSuite>("integrationTest") {
             useJUnitJupiter()
             dependencies {
-
+                implementation("org.junit.jupiter:junit-jupiter-params")
+                implementation("org.testcontainers:testcontainers:1.19.0")
+                implementation("ch.qos.logback:logback-classic:1.2.6")
             }
         }
     }
@@ -212,6 +214,12 @@ val java17Test = tasks.register<Test>("testOn17") {
     })
 }
 
+tasks.named<Test>("integrationTest") {
+    this.inputs.file(tasks.jar.map { it.archiveFile} )
+    dependsOn(":test-apps:hello-world:jibDockerBuild")
+    dependsOn(":test-apps:hello-world-modules:jibDockerBuild")
+    systemProperty("securityToolkitJarPath", tasks.jar.get().archiveFile.get().asFile.relativeTo(projectDir).path)
+}
 
 tasks.check {
     @Suppress("UnstableApiUsage")
