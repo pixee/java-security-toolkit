@@ -8,7 +8,8 @@ import java.io.ObjectInputStream;
 
 /**
  * This type exposes helper methods that will help defend against Java deserialization attacks
- * leveraging {@link ObjectInputStream} APIs.
+ * leveraging {@link ObjectInputStream} APIs by wrapping it in an Apache Commons IO {@link ValidatingObjectInputStream}
+ * that is configued to reject types that are known to be leveraged in deserialization attacks
  *
  * <p>For more information on deserialization checkout the <a
  * href="https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html">OWASP
