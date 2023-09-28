@@ -64,6 +64,7 @@ dependencies {
     java11SourceSet.apiConfigurationName("commons-io:commons-io:2.11.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
+    testImplementation("commons-fileupload:commons-fileupload:1.3.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.hamcrest:hamcrest-all:1.3")
     testImplementation("org.mockito:mockito-core:4.0.0")

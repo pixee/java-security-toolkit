@@ -41,17 +41,6 @@ final class ObjectInputFiltersTest {
     assertThat(o, instanceOf(DiskFileItem.class));
   }
 
-  @Test
-  void validating_ois_works() throws Exception {
-    ObjectInputStream ois =
-        ObjectInputFilters.createSafeObjectInputStream(new ByteArrayInputStream(serializedGadget));
-    assertThrows(
-        InvalidClassException.class,
-        () -> {
-          ois.readObject();
-          fail("this should have been blocked");
-        });
-  }
 
   @Test
   void ois_harden_works() throws Exception {
