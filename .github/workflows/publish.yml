@@ -35,7 +35,7 @@ jobs:
             build/libs/java-security-*.jar
 
       - name: "Publish to Maven Central"
-        run: ./gradlew publish
+        run: ./gradlew publishNebulaPublicationToSonatypeRepository closeAndReleaseSonatypeStagingRepository
         env:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSPHRASE }}
