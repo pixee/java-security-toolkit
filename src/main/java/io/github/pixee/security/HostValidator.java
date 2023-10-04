@@ -47,4 +47,16 @@ public interface HostValidator {
   static HostValidator fromAllowedHostPattern(final Pattern allowPattern) {
     return new PatternBasedHostValidator(allowPattern);
   }
+
+    /**
+     * Return a {@link HostValidator} that will assure a given domain is within the allowed domain. For example, given
+     * a domain of "good.com", this validator will allow "good.com", "www.good.com", "internal.good.com", etc.
+     *
+     * @param domainName the domain to allow, e.g., "good.com", or "internal-host"
+     * @return a validator that will only allow hosts within the given domain space
+     */
+    static HostValidator fromAllowedHostDomain(final String domainName) {
+        Pattern p = Pattern.compile("(.*\\." + Pattern.quote(domainName) + "|" + Pattern.quote(domainName) +")");
+        return new PatternBasedHostValidator(p);
+    }
 }

@@ -1,18 +1,19 @@
 package io.github.pixee.security;
 
-import static io.github.pixee.security.J8ApiBridge.setOf;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+
+import static io.github.pixee.security.J8ApiBridge.setOf;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 final class UrlsTest {
 
@@ -138,6 +139,21 @@ final class UrlsTest {
         () -> {
           Urls.create("https://evil.com/", setOf(UrlProtocol.HTTPS), allowsOnlyGoodDotCom);
         });
+
+    HostValidator allowsOnlyGoodDotComByDomainString = HostValidator.fromAllowedHostDomain("good.com");
+    Urls.create("https://good.com/", setOf(UrlProtocol.HTTPS), allowsOnlyGoodDotComByDomainString);
+    Urls.create("https://sub.good.com/", setOf(UrlProtocol.HTTPS), allowsOnlyGoodDotComByDomainString);
+    Urls.create("https://different-sub-123.good.com/", setOf(UrlProtocol.HTTPS), allowsOnlyGoodDotComByDomainString);
+    Urls.create("https://.good.com/", setOf(UrlProtocol.HTTPS), allowsOnlyGoodDotComByDomainString);
+
+    Stream.of("https://goodAcom/", "https://evil.com", "https://good.com.evil", "https://good.com.").forEach(badDomain -> {
+      assertThrows(
+              SecurityException.class,
+              () -> {
+                Urls.create(badDomain, setOf(UrlProtocol.HTTPS), allowsOnlyGoodDotComByDomainString);
+              });
+    });
+
   }
 
   @Test
