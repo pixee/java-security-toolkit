@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
@@ -138,6 +139,21 @@ final class UrlsTest {
         () -> {
           Urls.create("https://evil.com/", setOf(UrlProtocol.HTTPS), allowsOnlyGoodDotCom);
         });
+
+    HostValidator allowsOnlyGoodDotComByDomainString = HostValidator.fromAllowedHostDomain("good.com");
+    Urls.create("https://good.com/", setOf(UrlProtocol.HTTPS), allowsOnlyGoodDotComByDomainString);
+    Urls.create("https://sub.good.com/", setOf(UrlProtocol.HTTPS), allowsOnlyGoodDotComByDomainString);
+    Urls.create("https://different-sub-123.good.com/", setOf(UrlProtocol.HTTPS), allowsOnlyGoodDotComByDomainString);
+    Urls.create("https://.good.com/", setOf(UrlProtocol.HTTPS), allowsOnlyGoodDotComByDomainString);
+
+    List.of("https://goodAcom/", "https://evil.com", "https://good.com.evil", "https://good.com.").stream().forEach(badDomain -> {
+      assertThrows(
+              SecurityException.class,
+              () -> {
+                Urls.create(badDomain, setOf(UrlProtocol.HTTPS), allowsOnlyGoodDotComByDomainString);
+              });
+    });
+
   }
 
   @Test
