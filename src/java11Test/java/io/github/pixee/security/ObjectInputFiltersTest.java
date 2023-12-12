@@ -1,5 +1,6 @@
 package io.github.pixee.security;
 
+import io.github.pixee.security.ObjectInputFilters;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -37,6 +38,7 @@ final class ObjectInputFiltersTest {
   @Test
   void default_is_unprotected() throws Exception {
     ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(serializedGadget));
+    ObjectInputFilters.enableObjectFilterIfUnprotected(ois);
     Object o = ois.readObject();
     assertThat(o, instanceOf(DiskFileItem.class));
   }
@@ -45,6 +47,7 @@ final class ObjectInputFiltersTest {
   @Test
   void ois_harden_works() throws Exception {
     ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(serializedGadget));
+    ObjectInputFilters.enableObjectFilterIfUnprotected(ois);
     ObjectInputFilters.enableObjectFilterIfUnprotected(ois);
     assertThrows(
         InvalidClassException.class,
