@@ -2,6 +2,7 @@ package io.github.pixee.security;
 
 import static io.github.pixee.security.J8ApiBridge.listOf;
 import static io.github.pixee.security.J8ApiBridge.setOf;
+import io.github.pixee.security.SystemCommand;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +48,7 @@ public final class SystemCommand {
       final Set<SystemCommandRestrictions> restrictions)
       throws IOException {
     runChecks(command, restrictions);
-    return runtime.exec(command);
+    return SystemCommand.runCommand(runtime, command);
   }
 
   /**
@@ -84,7 +85,7 @@ public final class SystemCommand {
       final Set<SystemCommandRestrictions> restrictions)
       throws IOException {
     runChecks(command, restrictions);
-    return runtime.exec(command);
+    return SystemCommand.runCommand(runtime, command);
   }
 
   /**
@@ -121,7 +122,7 @@ public final class SystemCommand {
       final Set<SystemCommandRestrictions> restrictions)
       throws IOException {
     runChecks(command, restrictions);
-    return runtime.exec(command, envp);
+    return SystemCommand.runCommand(runtime, command, envp);
   }
 
   /**
@@ -161,7 +162,7 @@ public final class SystemCommand {
       final Set<SystemCommandRestrictions> restrictions)
       throws IOException {
     runChecks(command, restrictions);
-    return runtime.exec(command, envp, dir);
+    return SystemCommand.runCommand(runtime, command, envp, dir);
   }
 
   /**
@@ -183,7 +184,7 @@ public final class SystemCommand {
       final Set<SystemCommandRestrictions> restrictions)
       throws IOException {
     runChecks(command, restrictions);
-    return runtime.exec(command, envp);
+    return SystemCommand.runCommand(runtime, command, envp);
   }
 
   /**
@@ -223,7 +224,7 @@ public final class SystemCommand {
       final Set<SystemCommandRestrictions> restrictions)
       throws IOException {
     runChecks(command, restrictions);
-    return runtime.exec(command, envp, dir);
+    return SystemCommand.runCommand(runtime, command, envp, dir);
   }
 
   /**
