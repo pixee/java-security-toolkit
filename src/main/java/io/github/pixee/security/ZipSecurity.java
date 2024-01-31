@@ -68,9 +68,8 @@ public final class ZipSecurity {
 
     private boolean containsEscapesAndTargetsBelowRoot(final String name) {
       if (name.contains("../") || name.contains("..\\")) {
-        final File fileWithEscapes = new File(name);
         try {
-          if (isBelowOrSisterToCurrentDirectory(fileWithEscapes)) {
+          if (isBelowOrSisterToCurrentDirectory(name)) {
             return true;
           }
         } catch (IOException e) {
@@ -80,11 +79,14 @@ public final class ZipSecurity {
       return false;
     }
 
-    private boolean isBelowOrSisterToCurrentDirectory(final File fileWithEscapes) throws IOException {
-      final File currentDirectory = new File("");
-      Path currentPathRoot = currentDirectory.getCanonicalFile().toPath();
-      Path pathWithEscapes = fileWithEscapes.getCanonicalFile().toPath();
-      return pathWithEscapes.startsWith(currentPathRoot) || pathWithEscapes.getParent().equals(currentPathRoot.getParent());
+    private boolean isBelowOrSisterToCurrentDirectory(final String untrustedFileWithEscapes) throws IOException {
+      // Get the absolute path of the current directory
+      final File currentDirectory = new File("").getCanonicalFile();
+      final Path currentPathRoot = currentDirectory.toPath();
+      // Get the absolute path of the untrusted file
+      final File untrustedFile = new File(currentDirectory, untrustedFileWithEscapes);
+      final Path pathWithEscapes = untrustedFile.getCanonicalFile().toPath();
+      return !pathWithEscapes.startsWith(currentPathRoot);
     }
 
     private boolean isRootFileEntry(final String name) {
