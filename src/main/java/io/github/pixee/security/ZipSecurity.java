@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -69,7 +70,7 @@ public final class ZipSecurity {
       if (name.contains("../") || name.contains("..\\")) {
         final File fileWithEscapes = new File(name);
         try {
-          if (isBelowCurrentDirectory(fileWithEscapes)) {
+          if (isBelowOrSisterToCurrentDirectory(fileWithEscapes)) {
             return true;
           }
         } catch (IOException e) {
@@ -79,11 +80,11 @@ public final class ZipSecurity {
       return false;
     }
 
-    boolean isBelowCurrentDirectory(final File fileWithEscapes) throws IOException {
+    private boolean isBelowOrSisterToCurrentDirectory(final File fileWithEscapes) throws IOException {
       final File currentDirectory = new File("");
-      String canonicalizedTargetPath = fileWithEscapes.getCanonicalPath();
-      String canonicalizedCurrentPath = currentDirectory.getCanonicalPath();
-      return !canonicalizedTargetPath.startsWith(canonicalizedCurrentPath);
+      Path currentPathRoot = currentDirectory.getCanonicalFile().toPath();
+      Path pathWithEscapes = fileWithEscapes.getCanonicalFile().toPath();
+      return pathWithEscapes.startsWith(currentPathRoot) || pathWithEscapes.getParent().equals(currentPathRoot.getParent());
     }
 
     private boolean isRootFileEntry(final String name) {

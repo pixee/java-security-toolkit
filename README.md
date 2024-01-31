@@ -35,22 +35,22 @@ In Maven:
 <dependency>
   <groupId>io.github.pixee</groupId>
   <artifactId>java-security-toolkit</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
 </dependency>
 ```
 In Gradle:
 ```kotlin
-implementation("io.github.pixee:java-security-toolkit:1.1.1")
+implementation("io.github.pixee:java-security-toolkit:1.1.2")
 ```
 
 ## Contributing 
 We'd love to get contributions! See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### Building
-Building is meant for Java 11 and Maven 3:
+Building is meant for Java 11:
 
 ```
-mvn clean package
+./gradlew check
 ```
 
 ## FAQ

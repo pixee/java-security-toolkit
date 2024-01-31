@@ -4,10 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -44,6 +41,19 @@ final class ZipSecurityTest {
   @ValueSource(strings = {"../etc/whatever", "/foo/bar/../../../proc/whatever"})
   void it_prevents_escapes(String path) throws IOException {
     ZipEntry entry = new ZipEntry(path);
+    InputStream is = createZipFrom(entry);
+
+    ZipInputStream hardenedStream = ZipSecurity.createHardenedInputStream(is);
+    assertThrows(SecurityException.class, hardenedStream::getNextEntry);
+  }
+
+  /**
+   *
+   */
+  @Test
+  void it_prevents_sister_directory_escape() throws IOException {
+    String currentDir = new File("").getCanonicalFile().getName();
+    ZipEntry entry = new ZipEntry("foo/../../" + currentDir + "-other-sister-dir");
     InputStream is = createZipFrom(entry);
 
     ZipInputStream hardenedStream = ZipSecurity.createHardenedInputStream(is);
