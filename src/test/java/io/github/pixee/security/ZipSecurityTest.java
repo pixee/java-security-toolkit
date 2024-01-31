@@ -48,7 +48,7 @@ final class ZipSecurityTest {
   }
 
   /**
-   *
+   * This tests that there is no regression of CVE-2024-24569, which was a partial path traversal bypass that allowed access to the current working directory's sibling directories.
    */
   @Test
   void it_prevents_sister_directory_escape() throws IOException {
