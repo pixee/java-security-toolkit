@@ -26,6 +26,41 @@ public final class SystemCommand {
   }
 
   /**
+   * Does the same as {@link ProcessBuilder#start()}, but adds restrictions on what types of commands
+   * will be allowed. Will throw a {@link SecurityException} if any of the restrictions may be
+   * violated by the command found. Note that the method of detecting violations is based on
+   * semantic analysis of the command, and so is vulnerable to impedance mismatches between the
+   * analysis we perform and whatever shell is interpreting the command. Either way, it's a lot
+   * safer.
+   *
+   * @param processBuilder the system command about to be run
+   * @param restrictions the set of restrictions to run with
+   * @return the {@link Process} that results from the hardened {@link ProcessBuilder#start()} call
+   * @throws SecurityException if multiple commands are found
+   * @throws IllegalArgumentException if restriction is null
+   * @throws IOException from the wrapped system process invocation call
+   */
+  public static Process runProcessBuilder(
+      final ProcessBuilder processBuilder,
+      final Set<SystemCommandRestrictions> restrictions)
+      throws IOException {
+    runChecks(processBuilder.command(), restrictions);
+    return processBuilder.start();
+  }
+
+  /**
+   * Delegates to {@link SystemCommand#runProcessBuilder(ProcessBuilder, Set)} with default
+   * restrictions.
+   *
+   * @param processBuilder the system command about to be run
+   * @return the {@link Process} that results from the hardened {@link ProcessBuilder#start()} call
+   * @throws IOException from the wrapped system process invocation call
+   */
+  public static Process runProcessBuilder(final ProcessBuilder processBuilder) throws IOException {
+    return runProcessBuilder(processBuilder, defaultRestrictions());
+  }
+
+  /**
    * Does the same as {@link Runtime#exec(String)}, but adds restrictions on what types of commands
    * will be allowed. Will throw a {@link SecurityException} if any of the restrictions may be
    * violated by the command found. Note that the method of detecting violations is based on
@@ -273,6 +308,19 @@ public final class SystemCommand {
       final CommandLine parsedCommandLine = CommandLine.parse(command);
       runChecks(parsedCommandLine, restrictions);
     }
+  }
+
+  /**
+   * Helper method similar to {@link #runChecks(String[], Set)} but avoids the need to convert a {@link List} to an array.
+   * @param command to be checked
+   * @param restrictions to be checked against
+   */
+  private static void runChecks(final List<String> command, final Set<SystemCommandRestrictions> restrictions) {
+    final CommandLine parsedCommandLine = new CommandLine(command.get(0));
+    for (int i = 1; i < command.size(); i++) {
+      parsedCommandLine.addArgument(command.get(i));
+    }
+    runChecks(parsedCommandLine, restrictions);
   }
 
   private static void runChecks(
