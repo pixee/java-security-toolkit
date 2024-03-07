@@ -53,9 +53,11 @@ public final class ZipSecurity {
     @Override
     public ZipEntry getNextEntry() throws IOException {
       final ZipEntry entry = super.getNextEntry();
+      if (entry == null) {
+        return null;
+      }
       final String name = entry.getName();
-
-      if (!"".equals(name.trim())) {
+      if (!name.trim().isEmpty()) {
         if (isRootFileEntry(name)) {
           throw new SecurityException("encountered zip file path that is absolute: " + name);
         }
@@ -79,7 +81,8 @@ public final class ZipSecurity {
       return false;
     }
 
-    private boolean isBelowOrSisterToCurrentDirectory(final String untrustedFileWithEscapes) throws IOException {
+    private boolean isBelowOrSisterToCurrentDirectory(final String untrustedFileWithEscapes)
+        throws IOException {
       // Get the absolute path of the current directory
       final File currentDirectory = new File("").getCanonicalFile();
       final Path currentPathRoot = currentDirectory.toPath();

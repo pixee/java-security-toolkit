@@ -20,10 +20,13 @@ final class ZipSecurityTest {
     ZipEntry entry = new ZipEntry("normal.txt");
     InputStream is = createZipFrom(entry);
 
-    ZipInputStream hardenedStream =
-        ZipSecurity.createHardenedInputStream(is, StandardCharsets.UTF_8);
-    ZipEntry retrievedEntry = hardenedStream.getNextEntry();
-    assertThat(retrievedEntry.getName(), equalTo("normal.txt"));
+    try (ZipInputStream hardenedStream =
+        ZipSecurity.createHardenedInputStream(is, StandardCharsets.UTF_8)) {
+      ZipEntry retrievedEntry;
+      while ((retrievedEntry = hardenedStream.getNextEntry()) != null) {
+        assertThat(retrievedEntry.getName(), equalTo("normal.txt"));
+      }
+    }
   }
 
   @ParameterizedTest
@@ -32,9 +35,12 @@ final class ZipSecurityTest {
     ZipEntry entry = new ZipEntry(path);
     InputStream is = createZipFrom(entry);
 
-    ZipInputStream hardenedStream = ZipSecurity.createHardenedInputStream(is);
-    ZipEntry retrievedEntry = hardenedStream.getNextEntry();
-    assertThat(retrievedEntry.getName(), equalTo(path));
+    try (ZipInputStream hardenedStream = ZipSecurity.createHardenedInputStream(is)) {
+      ZipEntry retrievedEntry;
+      while ((retrievedEntry = hardenedStream.getNextEntry()) != null) {
+        assertThat(retrievedEntry.getName(), equalTo(path));
+      }
+    }
   }
 
   @ParameterizedTest
@@ -43,12 +49,14 @@ final class ZipSecurityTest {
     ZipEntry entry = new ZipEntry(path);
     InputStream is = createZipFrom(entry);
 
-    ZipInputStream hardenedStream = ZipSecurity.createHardenedInputStream(is);
-    assertThrows(SecurityException.class, hardenedStream::getNextEntry);
+    try (ZipInputStream hardenedStream = ZipSecurity.createHardenedInputStream(is)) {
+      assertThrows(SecurityException.class, () -> readAllEntries(hardenedStream));
+    }
   }
 
   /**
-   * This tests that there is no regression of CVE-2024-24569, which was a partial path traversal bypass that allowed access to the current working directory's sibling directories.
+   * This tests that there is no regression of CVE-2024-24569, which was a partial path traversal
+   * bypass that allowed access to the current working directory's sibling directories.
    */
   @Test
   void it_prevents_sister_directory_escape() throws IOException {
@@ -56,8 +64,9 @@ final class ZipSecurityTest {
     ZipEntry entry = new ZipEntry("foo/../../" + currentDir + "-other-sister-dir");
     InputStream is = createZipFrom(entry);
 
-    ZipInputStream hardenedStream = ZipSecurity.createHardenedInputStream(is);
-    assertThrows(SecurityException.class, hardenedStream::getNextEntry);
+    try (ZipInputStream hardenedStream = ZipSecurity.createHardenedInputStream(is)) {
+      assertThrows(SecurityException.class, () -> readAllEntries(hardenedStream));
+    }
   }
 
   @Test
@@ -65,8 +74,9 @@ final class ZipSecurityTest {
     ZipEntry entry = new ZipEntry("/foo.txt");
     InputStream is = createZipFrom(entry);
 
-    ZipInputStream hardenedStream = ZipSecurity.createHardenedInputStream(is);
-    assertThrows(SecurityException.class, hardenedStream::getNextEntry);
+    try (ZipInputStream hardenedStream = ZipSecurity.createHardenedInputStream(is)) {
+      assertThrows(SecurityException.class, () -> readAllEntries(hardenedStream));
+    }
   }
 
   private InputStream createZipFrom(final ZipEntry entry) throws IOException {
@@ -77,5 +87,10 @@ final class ZipSecurityTest {
     zos.close();
 
     return new ByteArrayInputStream(os.toByteArray());
+  }
+
+  @SuppressWarnings("StatementWithEmptyBody")
+  private static void readAllEntries(final ZipInputStream zis) throws IOException {
+    while (zis.getNextEntry() != null) {}
   }
 }
