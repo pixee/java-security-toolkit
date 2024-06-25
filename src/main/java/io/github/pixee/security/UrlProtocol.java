@@ -49,7 +49,16 @@ public enum UrlProtocol {
   TELNET("telnet"),
 
   /** Classpath */
-  CLASSPATH("classpath");
+  CLASSPATH("classpath"),
+
+  /** LDAP */
+  LDAP("ldap"),
+
+  /** Java */
+  JAVA("java"),
+
+  /** RMI */
+  RMI("rmi");
 
   private final String key;
 
