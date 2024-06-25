@@ -58,10 +58,14 @@ public final class JNDI {
         public Object lookup(final String resource) throws NamingException {
             Set<String> allowedProtocolPrefixes = allowedProtocols.stream().map(UrlProtocol::getKey).map(p -> p + ":").collect(Collectors.toSet());
             String canonicalResource = resource.toLowerCase().trim();
-            if (allowedProtocolPrefixes.stream().anyMatch(canonicalResource::startsWith)) {
-                return context.lookup(resource);
+            if(canonicalResource.contains(":")) {
+                if (allowedProtocolPrefixes.stream().anyMatch(canonicalResource::startsWith)) {
+                    return context.lookup(resource);
+                } else {
+                    throw new SecurityException("Unexpected JNDI resource protocol: " + resource);
+                }
             }
-            throw new SecurityException("Unexpected JNDI resource protocol: " + resource);
+            return context.lookup(resource);
         }
     }
 

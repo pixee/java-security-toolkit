@@ -40,6 +40,9 @@ final class JNDITest {
     void it_limits_resources_by_protocol() throws NamingException {
         JNDI.LimitedContext onlyJavaContext = JNDI.limitedContextByProtocol(context, J8ApiBridge.setOf(UrlProtocol.JAVA));
         assertThat(onlyJavaContext.lookup("java:comp/env"), is(JAVA_OBJECT));
+
+        // confirm protocols protections dont restrict simple name lookups
+        assertThat(onlyJavaContext.lookup("simple_name"), is(NAMED_OBJECT));
         assertThrows(SecurityException.class, () -> onlyJavaContext.lookup("ldap://localhost:1389/ou=system"));
         assertThrows(SecurityException.class, () -> onlyJavaContext.lookup("rmi://localhost:1099/evil"));
 
@@ -58,6 +61,9 @@ final class JNDITest {
     void default_limits_rmi_and_ldap() throws NamingException {
         JNDI.LimitedContext defaultLimitedContext = JNDI.limitedContext(context);
         assertThat(defaultLimitedContext.lookup("java:comp/env"), is(JAVA_OBJECT));
+
+        // confirm simple name lookups still work
+        assertThat(defaultLimitedContext.lookup("simple_name"), is(NAMED_OBJECT));
         assertThrows(SecurityException.class, () -> defaultLimitedContext.lookup("rmi://localhost:1099/evil"));
         assertThrows(SecurityException.class, () -> defaultLimitedContext.lookup("ldap://localhost:1389/ou=system"));
     }
