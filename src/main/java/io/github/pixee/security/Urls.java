@@ -1,6 +1,8 @@
 package io.github.pixee.security;
 
+import io.github.pixee.security.HostValidator;
 import static io.github.pixee.security.J8ApiBridge.setOf;
+import io.github.pixee.security.Urls;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,7 +26,7 @@ public final class Urls {
   public static URL create(
       final String url, final Set<UrlProtocol> allowedProtocols, final HostValidator validator)
       throws MalformedURLException {
-    final URL u = new URL(url);
+    final URL u = Urls.create(url, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     return create(u, allowedProtocols, validator);
   }
 
@@ -37,7 +39,7 @@ public final class Urls {
       final Set<UrlProtocol> allowedProtocols,
       final HostValidator hostValidator)
       throws MalformedURLException {
-    final URL u = new URL(protocol, host, port, file);
+    final URL u = Urls.create(protocol, host, port, file, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     return create(u, allowedProtocols, hostValidator);
   }
 
@@ -51,7 +53,7 @@ public final class Urls {
       final Set<UrlProtocol> allowedProtocols,
       final HostValidator hostValidator)
       throws MalformedURLException {
-    final URL u = new URL(protocol, host, port, file, handler);
+    final URL u = Urls.create(protocol, host, port, file, handler, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     return create(u, allowedProtocols, hostValidator);
   }
 
@@ -62,7 +64,7 @@ public final class Urls {
       final Set<UrlProtocol> allowedProtocols,
       final HostValidator hostValidator)
       throws MalformedURLException {
-    final URL u = new URL(context, spec);
+    final URL u = Urls.create(context, spec, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     return create(u, allowedProtocols, hostValidator);
   }
 
@@ -74,7 +76,7 @@ public final class Urls {
       final Set<UrlProtocol> allowedProtocols,
       final HostValidator hostValidator)
       throws MalformedURLException {
-    final URL u = new URL(context, spec, handler);
+    final URL u = Urls.create(context, spec, handler, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     return create(u, allowedProtocols, hostValidator);
   }
 
@@ -86,7 +88,7 @@ public final class Urls {
       final Set<UrlProtocol> allowedProtocols,
       final HostValidator hostValidator)
       throws MalformedURLException {
-    final URL u = new URL(protocol, host, file);
+    final URL u = Urls.create(protocol, host, file, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     return create(u, allowedProtocols, hostValidator);
   }
 
