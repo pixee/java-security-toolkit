@@ -1,0 +1,6 @@
+# This repository holds many APIs that Pixee codemods use to wrap in end-user code in order to create sandboxed, safe APIs. 
+# Therefore, many of the changes Pixeebot might suggest using APIs in a self-referential way that will cause errors.
+# To make sure we still receive suggestions from issues discovered by other code scanners, we setup this configuration.
+
+codemods:
+  catalog: less 
