@@ -38,4 +38,4 @@ jobs:
           automatic_release_tag: "${{ inputs.version }}"
           prerelease: false
           files: |
-            ~/.m2/repository/io/github/pixee/java-security-toolkit/${{ inputs.version }}/java-security-*
+            /home/runner/.m2/repository/io/github/pixee/java-security-toolkit/${{ inputs.version }}/*
