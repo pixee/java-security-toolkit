@@ -35,6 +35,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "${{ inputs.version }}"
           prerelease: false
           files: |
             ~/.m2/repository/io/github/pixee/java-security-toolkit/${{ inputs.version }}/java-security-*
