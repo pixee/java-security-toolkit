@@ -91,7 +91,7 @@ tasks.named(java11SourceSet.jarTaskName) {
 }
 
 group = "io.github.pixee"
-version = "1.2.0"
+version = "1.2.1"
 description = "java-security-toolkit"
 
 
