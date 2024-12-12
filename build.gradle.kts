@@ -145,6 +145,23 @@ publishing {
             }
         }
     }
+
+    repositories {
+        maven {
+            name = "build"
+            url = uri(layout.buildDirectory.dir("repos/releases"))
+        }
+    }
+}
+
+
+tasks.register<Zip>("zipRelease") {
+    dependsOn("publishAllPublicationsToBuildRepository")
+    from(layout.buildDirectory.dir("repos/releases")) {
+        exclude("**/maven-metadata.xml")
+        exclude("**/maven-metadata.xml*")
+    }
+    archiveFileName.set("java-security-toolkit.zip")
 }
 
 tasks.jacocoTestReport {

@@ -25,7 +25,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Execute Gradle build
-        run: ./gradlew -Pversion=${{ inputs.version }} build publishToMavenLocal
+        run: ./gradlew -Pversion=${{ inputs.version }} build zipRelease
         env:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSPHRASE }}
@@ -38,4 +38,4 @@ jobs:
           automatic_release_tag: "${{ inputs.version }}"
           prerelease: false
           files: |
-            /home/runner/.m2/repository/io/github/pixee/java-security-toolkit/${{ inputs.version }}/*
+            build/distributions/java-security-toolkit.zip
