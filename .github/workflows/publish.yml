@@ -1,9 +1,10 @@
 name: Create Release on Semantic Version Tag
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: a stable version to use (e.g. 1.2.1)
 
 jobs:
   release:
@@ -24,7 +25,11 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Execute Gradle build
-        run: ./gradlew build
+        run: ./gradlew -Pversion=${{ inputs.version }} build publishToMavenLocal
+        env:
+          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
+          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSPHRASE }}
+
 
       - name: "Create release"
         uses: "marvinpinto/action-automatic-releases@latest"
@@ -32,12 +37,4 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           files: |
-            build/libs/java-security-*.jar
-
-      - name: "Publish to Maven Central"
-        run: ./gradlew publishNebulaPublicationToSonatypeRepository closeAndReleaseSonatypeStagingRepository
-        env:
-          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
-          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSPHRASE }}
-          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.OSSRH_USERNAME }}
-          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.OSSRH_TOKEN }}
+            ~/.m2/repository/io/github/pixee/java-security-toolkit/${{ inputs.version }}/java-security-*
