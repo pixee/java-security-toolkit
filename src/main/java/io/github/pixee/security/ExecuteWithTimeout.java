@@ -14,7 +14,7 @@ public class ExecuteWithTimeout{
 	/**
 	 * Tries to execute a given {@link Callable} within a given timeout in milliseconds. Returns the result if successful, otherwise throws a {@link RuntimeException}.
 	 */
-	public <E> E executeWithTimeout(final Callable<E> action, final int timeout) {
+	public static <E> E executeWithTimeout(final Callable<E> action, final int timeout) {
         Future<E> maybeResult = Executors.newSingleThreadExecutor().submit(action);
         try {
             return maybeResult.get(timeout, TimeUnit.MILLISECONDS);
