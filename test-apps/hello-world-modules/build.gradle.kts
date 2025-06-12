@@ -1,6 +1,6 @@
 plugins {
     java
-    id("com.google.cloud.tools.jib") version "3.4.0"
+    id("com.google.cloud.tools.jib") version "3.4.5"
 }
 
 repositories {
