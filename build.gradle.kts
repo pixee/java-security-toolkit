@@ -64,7 +64,7 @@ dependencies {
     java11SourceSet.apiConfigurationName("commons-io:commons-io:2.19.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
-    testImplementation("commons-fileupload:commons-fileupload:1.3.3")
+    testImplementation("commons-fileupload:commons-fileupload:1.6.0")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.hamcrest:hamcrest-all:1.3")
     testImplementation("org.mockito:mockito-core:4.0.0")
@@ -198,7 +198,7 @@ testing {
                 }
                 implementation("org.hamcrest:hamcrest-all:1.3")
                 implementation("org.mockito:mockito-core:4.0.0")
-                implementation("commons-fileupload:commons-fileupload:1.3.3")
+                implementation("commons-fileupload:commons-fileupload:1.6.0")
             }
         }
 
