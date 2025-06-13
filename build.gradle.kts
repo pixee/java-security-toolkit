@@ -206,7 +206,7 @@ testing {
             useJUnitJupiter()
             dependencies {
                 implementation("org.junit.jupiter:junit-jupiter-params")
-                implementation("org.testcontainers:testcontainers:1.19.0")
+                implementation("org.testcontainers:testcontainers:1.21.1")
                 implementation("ch.qos.logback:logback-classic:1.5.18")
             }
         }
