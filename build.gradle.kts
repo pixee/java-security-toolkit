@@ -66,7 +66,7 @@ dependencies {
     testImplementation("commons-fileupload:commons-fileupload:1.3.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.hamcrest:hamcrest-all:1.3")
-    testImplementation("org.mockito:mockito-core:4.0.0")
+    testImplementation("org.mockito:mockito-core:4.11.0")
 }
 
 tasks.named<JavaCompile>(java11SourceSet.compileJavaTaskName) {
@@ -196,7 +196,7 @@ testing {
                     }
                 }
                 implementation("org.hamcrest:hamcrest-all:1.3")
-                implementation("org.mockito:mockito-core:4.0.0")
+                implementation("org.mockito:mockito-core:4.11.0")
                 implementation("commons-fileupload:commons-fileupload:1.3.3")
             }
         }
