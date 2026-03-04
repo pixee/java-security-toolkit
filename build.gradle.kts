@@ -12,7 +12,7 @@ plugins {
     id("com.netflix.nebula.maven-publish") version "20.3.0"
     id("com.netflix.nebula.publish-verification") version "20.3.0"
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
-    id("org.javamodularity.moduleplugin") version "1.8.12"
+    id("org.javamodularity.moduleplugin") version "1.8.15"
 }
 
 tasks.named<Jar>("javadocJar") {
