@@ -61,7 +61,7 @@ java {
 dependencies {
     api("commons-io:commons-io:2.19.0")
     java11SourceSet.apiConfigurationName("commons-io:commons-io:2.19.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.14.3")
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation("commons-fileupload:commons-fileupload:1.3.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
