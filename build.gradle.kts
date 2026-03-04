@@ -6,7 +6,7 @@ plugins {
     signing
     jacoco
     `jvm-test-suite`
-    id("com.netflix.nebula.contacts") version "7.0.1"
+    id("com.netflix.nebula.contacts") version "7.0.2"
     id("com.netflix.nebula.source-jar") version "20.3.0"
     id("com.netflix.nebula.javadoc-jar") version "20.3.0"
     id("com.netflix.nebula.maven-publish") version "20.3.0"
